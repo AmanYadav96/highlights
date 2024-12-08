@@ -1,0 +1,194 @@
+<%- include('../partials/head', {titleName: "Settings"}) %>
+ 
+    <body data-sidebar="dark" data-layout-mode="dark" data-topbar="light">
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../partials/page_top') %>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <%- include('../partials/side_menu', {selected: 17}) %>
+            <!-- Left Sidebar End -->
+          
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <% if (user.power == 0) { %>
+                            <div class="col-12">
+                              <div class="alert alert-warning" role="alert">
+                                You are on a demo account. You cannot access settings page.
+                              </div>
+                            </div>
+                          <% } else  { %>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">CDN Settings</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        <div class="row mb-4">
+                            <div class="col-xl-12">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <div id="alertContainer6"></div>
+                                            <div class="table-responsive mt-4">
+                                                <div class="mt-4">
+                                                    <p class="mb-1">CDN:</p>
+                                                    <select name="cdn_type" id="cdn_type" class="form-control">
+                                                        <option value="0" <%= config.cdn_type == 'none' ? 'selected' : '' %>>None</option>
+                                                        <option value="1" <%= config.cdn_type == 'aws' ? 'selected' : '' %>>AWS S3</option>
+                                                        <option value="2" <%= config.cdn_type == 'digitalocean' ? 'selected' : '' %>>DigitalOcean</option>
+                                                        <option value="3" <%= config.cdn_type == 'wasabi' ? 'selected' : '' %>>Wasabi</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Region:</p>
+                                                    <input type="text" class="form-control" id="cdn_region" placeholder="Enter Region" value="<%= config.cdn_region || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Endpoint:</p>
+                                                    <input type="text" class="form-control" id="cdn_endpoint" placeholder="Enter Endpoint" value="<%= config.cdn_endpoint || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Key:</p>
+                                                    <input type="text" class="form-control" id="cdn_key" placeholder="Enter Key" value="<%= config.cdn_key || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Secret:</p>
+                                                    <input type="password" class="form-control" id="cdn_secret" placeholder="Enter Secret" value="<%= config.cdn_secret || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Bucket name:</p>
+                                                    <input type="text" class="form-control" id="cdn_bucket_name" placeholder="Enter Bucket Name" value="<%= config.cdn_bucket_name || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" class="btn btn-primary waves-effect waves-light w-md" id="btnCDN">Save</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        <% } %>
+                    </div> <!-- container-fluid -->
+                </div>
+            <!-- end main content-->
+            <%- include('../partials/footer') %>
+        </div>
+        <!-- END layout-wrapper -->
+
+
+        <!-- Right Sidebar -->
+        <%- include('../partials/right_sidebar') %>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="assets/libs/jquery/jquery.min.js"></script>
+        <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="assets/libs/node-waves/waves.min.js"></script>
+        <script src="assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+        <script src="../assets/js/search.js"></script>
+        <!-- apexcharts -->
+        <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <script src="assets/js/pages/dashboard.init.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+<script>
+   
+ $(document).ready(function() {
+  $('#cdn_type').change(function() {
+    if ($(this).val() == 0) {
+      $('#cdn_region').attr('disabled', true);
+      $('#cdn_endpoint').attr('disabled', true);
+      $('#cdn_key').attr('disabled', true);
+      $('#cdn_secret').attr('disabled', true);
+      $('#cdn_bucket_name').attr('disabled', true);
+    } else {
+      $('#cdn_region').attr('disabled', false);
+      $('#cdn_endpoint').attr('disabled', false);
+      $('#cdn_key').attr('disabled', false);
+      $('#cdn_secret').attr('disabled', false);
+      $('#cdn_bucket_name').attr('disabled', false);
+    }
+  });
+});
+
+
+    $(document).ready(function() {  
+        $('#alertContainer6').empty();
+        $("#btnCDN").click(function(){
+        var cdnType = $('#cdn_type').val();
+        var cdnRegion = $('#cdn_region').val();
+        var cdnEndpoint = $('#cdn_endpoint').val();
+        var cdnSecret = $('#cdn_secret').val();
+        var cdnBucket = $('#cdn_bucket_name').val();
+        var cdnKey = $('#cdn_key').val();
+
+        saveCDN(cdnType, cdnRegion, cdnEndpoint, cdnSecret, cdnBucket, cdnKey);
+
+     });
+    });
+    async function saveCDN(cdnType, cdnRegion, cdnEndpoint, cdnSecret, cdnBucket, cdnKey) {
+      $('#alertContainer6').empty();
+
+       $('#btnCDN').addClass("disabled");
+        $('#btnCDN').html('Saving');
+
+      $.ajax({
+        type: "POST",
+        url: "/admin/saveCDN",
+        data: {
+            cdnType: cdnType,
+            cdnRegion: cdnRegion,
+            cdnEndpoint: cdnEndpoint,
+            cdnSecret: cdnSecret,
+            cdnBucket: cdnBucket,
+            cdnKey: cdnKey
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnCDN').removeClass("disabled");
+                 $('#btnCDN').html('Save');
+
+                $('#alertContainer6').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer6 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+
+</script>
+    </body>
+
+</html>

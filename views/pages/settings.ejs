@@ -1,0 +1,1104 @@
+<%- include('../partials/head', {titleName: "Settings"}) %>
+ 
+    <body data-sidebar="dark" data-layout-mode="dark" data-topbar="light">
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../partials/page_top') %>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <%- include('../partials/side_menu', {selected: 17}) %>
+            <!-- Left Sidebar End -->
+          
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <% if (user.power == 0) { %>
+                            <div class="col-12">
+                              <div class="alert alert-warning" role="alert">
+                                You are on a demo account. You cannot access settings page.
+                              </div>
+                            </div>
+                          <% } else  { %>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">Settings</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        <div class="row mb-4">
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">Agora Settings</h5>
+                                            <div id="alertContainer"></div>
+                                            <div class="table-responsive mt-4">
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Agora Id:</p>
+                                                    <input type="text" class="form-control" id="agoraId" placeholder="Agora Id" value="<%= config.agora_id || '' %>">
+                                                </div>
+                                                <div class="mt-4 mb-4">
+                                                    <p class="mb-1">Agora Certificate:</p>
+                                                    <input type="text" class="form-control" id="agoraSecret" value="<%= config.agora_certificate || '' %>">
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="agoraSave" class="btn btn-primary waves-effect waves-light w-md">Save</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">Stripe Keys</h5>
+                                            <div id="alertContainer65"></div>
+                                            <div class="table-responsive mt-4">
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Publishable Key:</p>
+                                                    <input type="text" class="form-control" id="pubKey" placeholder="Stripe Publishable Key" value="<%= config.stripe_publish_key || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">License Key:</p>
+                                                    <input type="text" class="form-control" id="licenseKey" placeholder="Stripe License Key" value="<%= config.stripe_license_key || '' %>">
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="stripeSave" class="btn btn-primary waves-effect waves-light w-md">Save</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">CDN Settings</h5>
+                                            <div id="alertContainer6"></div>
+                                            <div class="table-responsive mt-4">
+                                                <div class="mt-4">
+                                                    <p class="mb-1">CDN:</p>
+                                                    <select name="cdn_type" id="cdn_type" class="form-control">
+                                                        <option value="0" <%= config.cdn_type == 'none' ? 'selected' : '' %>>None</option>
+                                                        <option value="1" <%= config.cdn_type == 'aws' ? 'selected' : '' %>>AWS S3</option>
+                                                        <option value="2" <%= config.cdn_type == 'digitalocean' ? 'selected' : '' %>>DigitalOcean</option>
+                                                        <option value="3" <%= config.cdn_type == 'wasabi' ? 'selected' : '' %>>Wasabi</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Region:</p>
+                                                    <input type="text" class="form-control" id="cdn_region" placeholder="Enter Region" value="<%= config.cdn_region || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Endpoint:</p>
+                                                    <input type="text" class="form-control" id="cdn_endpoint" placeholder="Enter Region" value="<%= config.cdn_endpoint || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Key:</p>
+                                                    <input type="text" class="form-control" id="cdn_key" placeholder="Enter Region" value="<%= config.cdn_key || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Secret:</p>
+                                                    <input type="password" class="form-control" id="cdn_secret" placeholder="Enter Region" value="<%= config.cdn_secret || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Bucket name:</p>
+                                                    <input type="text" class="form-control" id="cdn_bucket_name" placeholder="Enter Region" value="<%= config.cdn_bucket_name || '' %>" <%= config.cdn_type == 'none' ? 'disabled' : '' %>>
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" class="btn btn-primary waves-effect waves-light w-md" id="btnCDN">Save</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                           <div class="row mb-4">
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">Change Password</h5>
+                                            <input type="text" class="form-control" id="id" value="<%= user.id || 0 %>" hidden>
+                                            <div class="table-responsive mt-4">
+                                                <div id="alertContainer2"></div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Username:</p>
+                                                    <input type="text" class="form-control" id="username" value="<%= user.username || '' %>" disabled>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Password:</p>
+                                                    <input type="text" class="form-control" id="password" placeholder="Enter new Password">
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="btnUpdate" class="btn btn-primary waves-effect waves-light w-md">Change</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">Upload Rewards Settings</h5>
+                                            <div class="table-responsive mt-4">
+                                                <div id="alertContainer5613"></div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Enable/Disable Rewards:</p>
+                                                    <select class="form-control form-select" id="settings">
+                                                        <option value="1" <%= config.reward_setting == '1' ? 'selected' : '' %>>Enabled</option>
+                                                        <option value="0" <%= config.reward_setting == '0' ? 'selected' : '' %>>Disabled</option>
+                                                </select> 
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Videos count per day:</p>
+                                                    <input type="text" class="form-control" id="count" value="<%= config.videos_count  || '' %>" placeholder="Enter Count">
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="btnUpdateReward" class="btn btn-primary waves-effect waves-light w-md">Update</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">Adult Content Settings</h5>
+                                            <div class="table-responsive mt-4">
+                                                <div id="alertContainer56134"></div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Enable/Disable Adult Content:</p>
+                                                    <select class="form-control form-select" id="settingContent">
+                                                        <option value="1" <%= config.adult_content_setting == '1' ? 'selected' : '' %>>Enabled</option>
+                                                        <option value="0" <%= config.adult_content_setting == '0' ? 'selected' : '' %>>Disabled</option>
+                                                    </select> 
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Adult Content Detection Threshold(Must be above than 3.5):</p>
+                                                    <!-- <select class="form-control form-select" id="settingContent">
+                                                        <option value="1" <%= config.adult_content_setting == '1' ? 'selected' : '' %>>Enabled</option>
+                                                        <option value="0" <%= config.adult_content_setting == '0' ? 'selected' : '' %>>Disabled</option>
+                                                    </select>  -->
+                                                    <input type="text" class="form-control" id="threshold" value="<%= config.adult_content_threshold  || '' %>" placeholder="Enter Threshold">
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="btnUpdateContent" class="btn btn-primary waves-effect waves-light w-md">Update</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">RabbitMQ Configuration</h5>
+                                            <div class="table-responsive mt-4">
+                                                <div id="alertContainer562134"></div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Producer (if any):</p>
+                                                    <input type="text" id="producer" class="form-control" value="<%= config.rabbit_mq_producer_setting || '' %>"> 
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Consumer (if any):</p>
+                                                    <input type="text" id="consumer" class="form-control" value="<%= config.rabbit_mq_consumer_setting || '' %>"> 
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="btnUpdateConsumer" class="btn btn-primary waves-effect waves-light w-md">Update</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">Server Settings</h5>
+                                            <div id="alertContainer1"></div>
+                                            <div class="table-responsive mt-4">
+                                                <div class="mt-4">
+                                                    <p class="mb-1">App Logo :</p>
+                                                    <input type="file" class="form-control" id="appIcon">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">App Secret :</p>
+                                                    <div class="hstack gap-3">
+                                                        <input class="form-control me-auto" type="text" disabled value="<%= config.app_id  || '' %>" id="appSecret">
+                                                        <button type="button" id="btnGenerate" class="btn btn-success waves-effect waves-light w-md">Generate</button>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Domain (if any):</p>
+                                                    <input type="text" id="domain" class="form-control" value="<%= config.service_url || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <div class="hstack gap-3" style="gap: 16rem !important;">
+                                                        <p class="mb-1">Accessible Address:</p>
+                                                        <p class="mb-1">Accessible Port:</p>
+                                                    </div>
+                                                    <div class="hstack gap-3">
+                                                        <input type="text" id="accAddress" class="form-control" value="<%= config.accessible_address || '' %>">                                                        
+                                                        <input type="text" id="accAddressPort" class="form-control" value="<%= config.accessible_address_port || '' %>">                                                        
+                                                    </div>
+                                                    <p>Your accessible address is: <span id="accUrl"></span></p>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <div class="hstack gap-3" style="gap: 17.5rem !important;">
+                                                        <p class="mb-1">Stream  Address:</p>
+                                                        <p class="mb-1">Stream  Port:</p>
+                                                    </div>
+                                                    <div class="hstack gap-3">
+                                                        <input type="text" id="streamAddress" class="form-control" value="<%= config.stream_address || '' %>">                                                        
+                                                        <input type="text" id="streamAddressPort" class="form-control" value="<%= config.stream_address_port || '' %>">                                                        
+                                                    </div>
+                                                    <p>Your stream  address is: <span id="streamurl"></span></p>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <div class="hstack gap-3" style="gap: 16rem !important;">
+                                                        <p class="mb-1">Web Login Address:</p>
+                                                        <p class="mb-1">Login Port:</p>
+                                                    </div>
+                                                    <div class="hstack gap-3">
+                                                        <input type="text" id="loginAddress" class="form-control" value="<%= config.login_address || '' %>">                                                        
+                                                        <input type="text" id="loginPort" class="form-control" value="<%= config.login_address_port || '' %>">                                                        
+                                                    </div>
+                                                    <p>Your web login address is: <span id="loginUrl"></span></p>
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="btnSave" class="btn btn-primary waves-effect waves-light w-md">Save</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-xl-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">Algorithm Settings</h5>
+                                            <div class="table-responsive mt-4">
+                                                <div id="alertContainer56"></div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Conversion rate:</p>
+                                                    <input type="text" class="form-control" id="conversionRate" value="<%= config.conversion_rate || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Conversion rate of coins:</p>
+                                                    <input type="text" class="form-control" id="conversionRateCoin" value="<%= config.conversion_rate_per_coin || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Minimum withdrawl:</p>
+                                                    <input type="text" class="form-control" id="withdrawl" placeholder="Minimum withdrawl" value="<%= config.minimum_withdrawal || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Refferal reward:</p>
+                                                    <input type="text" class="form-control" id="reffReward" placeholder="Refferal Reward" value="<%= config.refferal_reward || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Commision (%):</p>
+                                                    <input type="text" class="form-control" id="commision" placeholder="Refferal Reward" value="<%= config.commision || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Video boost per day:</p>
+                                                    <input type="text" class="form-control" id="boostPerDay" placeholder="Boost per day" value="<%= config.boost_per_day  || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Ad boost per view:</p>
+                                                    <input type="text" class="form-control" id="boostPerView" placeholder="Boost per view" value="<%= config.boost_per_view  || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Ad algorithm:</p>
+                                                    <select class="form-control form-select" id="adAlgo">
+                                                        <option value="After 5 videos" <%= config.boost_video == 'After 5 videos' ? 'selected' : '' %>>After 5 videos</option>
+                                                        <option value="After 10 videos" <%= config.boost_video == 'After 10 videos' ? 'selected' : '' %>>After 10 videos</option>
+                                                        <option value="On app open" <%= config.boost_video == 'On app open' ? 'selected' : '' %>>On app open</option>
+                                                </select>                                                
+                                            </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="btnSaveAlgo" class="btn btn-primary waves-effect waves-light w-md">Save</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">App Settings</h5>
+                                            <div id="alertContainer561"></div>
+                                            <div class="table-responsive mt-4">
+                                                <div class="mt-4">
+                                                    <p class="mb-1">App Name:</p>
+                                                    <input type="text" id="appName" class="form-control" value="<%= config.app_name || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Package Name(Android):</p>
+                                                    <input type="text" id="androidPkg" class="form-control" value="<%= config.package_name_android || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Package Name(ioS):</p>
+                                                    <input type="text" id="iosPkg" class="form-control" value="<%= config.package_name_ios || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Stripe page coin's icon:</p>
+                                                    <input type="file" class="form-control" id="iconStripe">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">FAQ link:</p>
+                                                    <input type="text" id="faqLink" class="form-control" value="<%= config.faq_link || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Privacy Policy link:</p>
+                                                    <input type="text" id="pvcLink" class="form-control" value="<%= config.privacy_policy_link || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Terms link:</p>
+                                                    <input type="text" id="termLink" class="form-control" value="<%= config.terms_link || '' %>">
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="btnSaveApp" class="btn btn-primary waves-effect waves-light w-md">Save</a>
+                                                    <a type="button" id="download-json-button" class="btn btn-primary waves-effect waves-light w-md">Download JSON</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        <% } %>
+                    </div> <!-- container-fluid -->
+                </div>
+            <!-- end main content-->
+            <%- include('../partials/footer') %>
+        </div>
+        <!-- END layout-wrapper -->
+
+
+        <!-- Right Sidebar -->
+        <%- include('../partials/right_sidebar') %>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="assets/libs/jquery/jquery.min.js"></script>
+        <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="assets/libs/node-waves/waves.min.js"></script>
+        <script src="assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+        <script src="../assets/js/search.js"></script>
+        <!-- apexcharts -->
+        <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <script src="assets/js/pages/dashboard.init.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+<script>
+
+const domainInput = document.getElementById('domain');
+const accAddressInput = document.getElementById('accAddress');
+const accAddressPortInput = document.getElementById('accAddressPort');
+const accUrlSpan = document.getElementById('accUrl');
+const streamAddressInput = document.getElementById('streamAddress');
+const streamAddressPortInput = document.getElementById('streamAddressPort');
+const streamUrlSpan = document.getElementById('streamurl');
+const loginAddressInput = document.getElementById('loginAddress');
+const loginAddressPortInput = document.getElementById('loginPort');
+const loginUrlSpan = document.getElementById('loginUrl');
+const appSecret = document.getElementById('appSecret');
+const appName = document.getElementById('appName');
+const agoraId = document.getElementById('agoraId');
+const faqLink = document.getElementById('faqLink');
+const pvcLink = document.getElementById('pvcLink');
+const termLink = document.getElementById('termLink');
+const androidPkg = document.getElementById('androidPkg');
+const iosPkg = document.getElementById('iosPkg');
+
+// Define the function to update URLs
+function updateUrls() {
+  if (domainInput.value === '') {
+    accUrlSpan.textContent = accAddressInput.value + ':' + accAddressPortInput.value;
+    streamUrlSpan.textContent = streamAddressInput.value + ':' + streamAddressPortInput.value;
+    loginUrlSpan.textContent = loginAddressInput.value + ':' + loginAddressPortInput.value;
+  } else {
+    accUrlSpan.textContent = domainInput.value + ':' + accAddressPortInput.value;
+    streamUrlSpan.textContent = domainInput.value + ':' + streamAddressPortInput.value;
+    loginUrlSpan.textContent = domainInput.value + ':' + loginAddressPortInput.value;
+  }
+}
+
+// Set the initial text content of the URL spans
+updateUrls();
+
+// Add event listeners to each input element
+accAddressInput.addEventListener('input', updateUrls);
+accAddressPortInput.addEventListener('input', updateUrls);
+streamAddressInput.addEventListener('input', updateUrls);
+streamAddressPortInput.addEventListener('input', updateUrls);
+loginAddressInput.addEventListener('input', updateUrls);
+loginAddressPortInput.addEventListener('input', updateUrls);
+domainInput.addEventListener('input', updateUrls);
+
+
+appSecret.addEventListener('change', function(event) {
+  globalValues.api_key = event.target.value;
+});
+
+appName.addEventListener('change', function(event) {
+  globalValues.app_name = event.target.value;
+});
+
+agoraId.addEventListener('change', function(event) {
+  globalValues.agora_app_id = event.target.value;
+});
+
+faqLink.addEventListener('change', function(event) {
+  globalValues.faq_link = event.target.value;
+});
+
+pvcLink.addEventListener('change', function(event) {
+  globalValues.privacy_policy_link = event.target.value;
+});
+
+termLink.addEventListener('change', function(event) {
+  globalValues.terms_link = event.target.value;
+});
+
+androidPkg.addEventListener('change', function(event) {
+  globalValues.package_name_android = event.target.value;
+});
+
+iosPkg.addEventListener('change', function(event) {
+  globalValues.package_name_ios = event.target.value;
+});
+
+streamAddressInput.addEventListener('change', function(event) {
+  globalValues.stream_url = event.target.value;
+});
+
+loginAddressInput.addEventListener('change', function(event) {
+  globalValues.web_login_url = event.target.value;
+});
+
+accAddressInput.addEventListener('change', function(event) {
+  globalValues.socket_url = event.target.value;
+});
+
+domainInput.addEventListener('change', function(event) {
+  globalValues.api_host = event.target.value;
+});
+
+
+  const globalValues = {
+    "app_name": appName.value,
+    "api_key": appSecret.value,
+    "agora_app_id": agoraId.value,
+    "api_host": domainInput.value+':'+accAddressPortInput.value,
+    "socket_url": accAddressInput.value+':'+ accAddressPortInput.value,
+    "stream_url": streamAddressInput.value+':'+streamAddressPortInput.value,
+    "web_login_url": loginAddressInput.value+':'+loginAddressPortInput.value,
+    "faq_link": faqLink.value,
+    "privacy_policy_link": pvcLink.value,
+    "terms_link": termLink.value,
+    "package_name_android": androidPkg.value,
+    "package_name_ios": iosPkg.value,
+  };
+
+  const downloadJsonButton = document.getElementById("download-json-button");
+  downloadJsonButton.addEventListener("click", downloadGlobalJson);
+
+    var appSecretText;
+    $(document).ready(function() { 
+        appSecretText = $('#appSecret'); 
+        var token = appSecretText.val();
+        $("#btnGenerate").click(function(){
+        console.log(token)
+        generateToken(token);
+
+     });
+    });
+    async function generateToken(token) {
+      $.ajax({
+        type: "POST",
+        url: "/admin/generateToken",
+        data: {
+            token: token,
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                appSecretText.val(res.hash);
+            }
+        },
+        dataType: "json",
+      });
+    }
+
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#agoraSave").click(function(){
+        var agoraId = $('#agoraId').val();
+        var agoraSecret = $('#agoraSecret').val();
+        saveAgora(agoraId, agoraSecret);
+
+     });
+    });
+    async function saveAgora(agoraId, agoraSecret) {
+      $('#alertContainer').empty();
+
+       $('#agoraSave').addClass("disabled");
+        $('#agoraSave').html('Saving');
+
+      $.ajax({
+        type: "POST",
+        url: "/admin/saveAgora",
+        data: {
+            agoraId: agoraId,
+            agoraSecret: agoraSecret
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#agoraSave').removeClass("disabled");
+                 $('#agoraSave').html('Save');
+
+                $('#alertContainer').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#stripeSave").click(function(){
+        var pubKey = $('#pubKey').val();
+        var secretKey = $('#licenseKey').val();
+        saveStripe(pubKey, secretKey);
+
+     });
+    });
+    async function saveStripe(pubKey, secretKey) {
+      $('#alertContainer65').empty();
+
+       $('#stripeSave').addClass("disabled");
+        $('#stripeSave').html('Saving');
+
+      $.ajax({
+        type: "POST",
+        url: "/admin/saveStripe",
+        data: {
+            pubKey: pubKey,
+            secretKey: secretKey
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#stripeSave').removeClass("disabled");
+                 $('#stripeSave').html('Save');
+
+                $('#alertContainer65').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer65 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+   
+    $(document).ready(function() {
+  $('#cdn_type').change(function() {
+    if ($(this).val() == 0) {
+      $('#cdn_region').attr('disabled', true);
+      $('#cdn_endpoint').attr('disabled', true);
+      $('#cdn_key').attr('disabled', true);
+      $('#cdn_secret').attr('disabled', true);
+      $('#cdn_bucket_name').attr('disabled', true);
+    } else {
+      $('#cdn_region').attr('disabled', false);
+      $('#cdn_endpoint').attr('disabled', false);
+      $('#cdn_key').attr('disabled', false);
+      $('#cdn_secret').attr('disabled', false);
+      $('#cdn_bucket_name').attr('disabled', false);
+    }
+  });
+});
+
+
+    $(document).ready(function() {  
+        $('#alertContainer6').empty();
+        $("#btnCDN").click(function(){
+        var cdnType = $('#cdn_type').val();
+        var cdnRegion = $('#cdn_region').val();
+        var cdnEndpoint = $('#cdn_endpoint').val();
+        var cdnSecret = $('#cdn_secret').val();
+        var cdnBucket = $('#cdn_bucket_name').val();
+        var cdnKey = $('#cdn_key').val();
+
+        saveCDN(cdnType, cdnRegion, cdnEndpoint, cdnSecret, cdnBucket, cdnKey);
+
+     });
+    });
+    async function saveCDN(cdnType, cdnRegion, cdnEndpoint, cdnSecret, cdnBucket, cdnKey) {
+      $('#alertContainer6').empty();
+
+       $('#btnCDN').addClass("disabled");
+        $('#btnCDN').html('Saving');
+
+      $.ajax({
+        type: "POST",
+        url: "/admin/saveCDN",
+        data: {
+            cdnType: cdnType,
+            cdnRegion: cdnRegion,
+            cdnEndpoint: cdnEndpoint,
+            cdnSecret: cdnSecret,
+            cdnBucket: cdnBucket,
+            cdnKey: cdnKey
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnCDN').removeClass("disabled");
+                 $('#btnCDN').html('Save');
+
+                $('#alertContainer6').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer6 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#btnSave").click(function(){
+        var accAddress = $('#accAddress').val();
+        var appIcon = $('#appIcon').prop('files');
+        var appSecret = $('#appSecret').val();
+        var streamAddress = $('#streamAddress').val();
+        var loginAddress = $('#loginAddress').val();
+        var domain =   $('#domain').val();
+        var streamAddressPort = $('#streamAddressPort').val();
+        var accAddressPort = $('#accAddressPort').val();
+        var loginPort = $('#loginPort').val();
+
+        saveApp(appIcon, appSecret, accAddress, streamAddress, domain, streamAddressPort, accAddressPort, loginAddress, loginPort);
+
+     });
+    });
+    async function saveApp(appIcon, appSecret, accAddress, streamAddress, domain, streamAddressPort, accAddressPort, loginAddress, loginPort) {
+      $('#alertContainer1').empty();
+
+          // Create a new FormData object
+        const formData = new FormData();
+
+        // Add the form fields and values
+        formData.append('appSecret', appSecret);
+        formData.append('accAddress', accAddress);
+        formData.append('streamAddress', streamAddress);
+        formData.append('domain', domain);
+        formData.append('streamAddressPort', streamAddressPort);
+        formData.append('accAddressPort', accAddressPort);
+        formData.append('loginAddress', loginAddress);
+        formData.append('loginPort', loginPort);
+
+        // Add the file to the FormData object
+        formData.append('appIcon', appIcon[0]);
+
+        $('#btnSave').addClass("disabled");
+        $('#btnSave').html('Saving');
+
+      $.ajax({
+        type: "POST",
+        url: "/admin/saveApp",
+        data: formData,
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnSave').removeClass("disabled");
+                 $('#btnSave').html('Save');
+                $('#alertContainer1').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer1 .alert').hide();
+                }, 1000); 
+                }
+        },
+        // Set the content type to multipart/form-data
+        contentType: false,
+        // Set the processData option to false to prevent jQuery from trying to convert the FormData object to a string
+        processData: false,
+        dataType: 'json',
+      });
+    }
+    $(document).ready(function() {  
+        $('#alertContainer2').empty();
+        $("#btnUpdate").click(function(){
+            $('#btnUpdate').removeClass("disabled");
+            $('#btnUpdate').html('Change');
+        var id = $('#id').val();
+        var password = $('#password').val();
+
+        savePassword(id, password);
+
+     });
+    });
+    async function savePassword(id, password) {
+      $('#alertContainer2').empty();
+
+      if (!password) {
+            $('#alertContainer2').html(`
+                <div class="alert alert-danger" role="alert">
+                Please Enter Password.
+                </div>
+            `);
+            setTimeout(function() {
+                $('#alertContainer2 .alert').hide();
+            }, 1000);
+            return;
+            }
+            $('#btnUpdate').addClass("disabled");
+            $('#btnUpdate').html('Changing');
+      $.ajax({
+        type: "POST",
+        url: "/admin/savePassword",
+        data: {
+            id: id,
+            password: password,
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnUpdate').removeClass("disabled");
+                $('#btnUpdate').html('Change');
+                $('#alertContainer2').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer2 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+
+
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#btnSaveAlgo").click(function(){
+        var conversionRate = $('#conversionRate').val();
+        var conversionRateCoin = $('#conversionRateCoin').val();
+        var minWithdraw = $('#withdrawl').val();
+        var videoPerDay = $('#boostPerDay').val();
+        var boostPerView = $('#boostPerView').val();
+        var adAlgo = $('#adAlgo').val();
+        var reffReward = $('#reffReward').val();
+        var commision = $('#commision').val();
+        saveAlgo(conversionRate, minWithdraw, videoPerDay, adAlgo, reffReward, boostPerView, commision, conversionRateCoin);
+
+     });
+    });
+    async function saveAlgo(conversionRate, minWithdraw, videoPerDay, adAlgo, reffReward, boostPerView, commision, conversionRateCoin) {
+      $('#alertContainer56').empty();
+
+       $('#btnSaveAlgo').addClass("disabled");
+        $('#btnSaveAlgo').html('Saving');
+
+      $.ajax({
+        type: "POST",
+        url: "/admin/saveAlgorithm",
+        data: {
+            conversionRate: conversionRate,
+            minWithdraw: minWithdraw,
+            reffReward: reffReward,
+            videoPerDay: videoPerDay,
+            adAlgo : adAlgo,
+            boostPerView: boostPerView,
+            commision: commision,
+            conversionRateCoin: conversionRateCoin
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnSaveAlgo').removeClass("disabled");
+                 $('#btnSaveAlgo').html('Save');
+
+                $('#alertContainer56').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer56 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+
+
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#btnSaveApp").click(function(){
+        var appName = $('#appName').val();
+        var faqLink = $('#faqLink').val();
+        var pvcLink = $('#pvcLink').val();
+        var termsLink = $('#termLink').val();
+        var androidPkg = $('#androidPkg').val();
+        var iosPkg = $('#iosPkg').val();
+        var iconStripe = $('#iconStripe').prop('files');
+        saveAppSettings(appName, faqLink, pvcLink, termsLink, iconStripe, iosPkg, androidPkg);
+
+     });
+    });
+    async function saveAppSettings(appName, faqLink, pvcLink, termsLink, iconStripe, iosPkg, androidPkg) {
+      $('#alertContainer561').empty();
+
+                // Create a new FormData object
+                const formData = new FormData();
+
+                formData.append('appName', appName);
+                formData.append('faqLink', faqLink);
+                formData.append('pvcLink', pvcLink);
+                formData.append('termsLink', termsLink);
+                formData.append('androidPkg', androidPkg);
+                formData.append('iosPkg', iosPkg);
+                formData.append('iconStripe', iconStripe[0]);
+
+
+            $('#btnSaveApp').addClass("disabled");
+                $('#btnSaveApp').html('Saving');
+
+      $.ajax({
+        type: "POST",
+        url: "/admin/saveAppSettings",
+        data: formData,
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnSaveApp').removeClass("disabled");
+                 $('#btnSaveApp').html('Save');
+
+                $('#alertContainer561').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer561 .alert').hide();
+                }, 1000); 
+                }
+        },
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+      });
+    }
+
+
+    function downloadGlobalJson() {
+    const blob = new Blob([JSON.stringify(globalValues)], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "global.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#btnUpdateReward").click(function(){
+        var settings = $('#settings').val();
+        var count = $('#count').val();
+        updateReward(settings, count);
+
+     });
+    });
+    async function updateReward(settings, count) {
+      $.ajax({
+        type: "POST",
+        url: "/admin/rewardSetting",
+        data: {
+            settings: settings,
+            count: count
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnSaveApp').removeClass("disabled");
+                 $('#btnSaveApp').html('Save');
+
+                $('#alertContainer5613').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer5613 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+
+
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#btnUpdateContent").click(function(){
+        var settings = $('#settingContent').val(); 
+        var threshold = $('#threshold').val();
+        updateContent(settings, threshold);
+        console.log(settings)
+     });
+    });
+    async function updateContent(settings, threshold) {
+      $.ajax({
+        type: "POST",
+        url: "/admin/contentSettings",
+        data: {
+            settings: settings,
+            threshold: threshold
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnSaveApp').removeClass("disabled");
+                 $('#btnSaveApp').html('Save');
+
+                $('#alertContainer56134').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer56134 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+
+    //RABBITMQ PRODUCER
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#btnUpdateProducer").click(function(){
+        var producerSetting = $('#producer').val();
+        updateRabbitMQProducer(producerSetting);
+     });
+    });
+    
+    async function updateRabbitMQProducer(producerSetting) {
+      $.ajax({
+        type: "POST",
+        url: "/admin/rabbitMQProducerSettings",
+        data: {
+            producerSetting: producerSetting
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnSaveApp').removeClass("disabled");
+                 $('#btnSaveApp').html('Save');
+
+                $('#alertContainer562134').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer562134 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+    //RABBITMQ CONSUMER
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#btnUpdateConsumer").click(function(){
+        var consumerSetting = $('#consumer').val();
+        var producerSetting = $('#producer').val();                
+        updateRabbitMQConsumer(consumerSetting, producerSetting)
+     });
+    });
+
+    async function updateRabbitMQConsumer(consumerSetting, producerSetting) {
+      $.ajax({
+        type: "POST",
+        url: "/admin/rabbitMQConsumerSettings",
+        data: {
+            consumerSetting: consumerSetting,
+            producerSetting: producerSetting
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnSaveApp').removeClass("disabled");
+                 $('#btnSaveApp').html('Save');
+
+                $('#alertContainer562134').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer562134 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+</script>
+    </body>
+
+</html>

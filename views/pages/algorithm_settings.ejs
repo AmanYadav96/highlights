@@ -1,0 +1,190 @@
+<%- include('../partials/head', {titleName: "Settings"}) %>
+ 
+    <body data-sidebar="dark" data-layout-mode="dark" data-topbar="light">
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../partials/page_top') %>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <%- include('../partials/side_menu', {selected: 17}) %>
+            <!-- Left Sidebar End -->
+          
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <% if (user.power == 0) { %>
+                            <div class="col-12">
+                              <div class="alert alert-warning" role="alert">
+                                You are on a demo account. You cannot access settings page.
+                              </div>
+                            </div>
+                          <% } else  { %>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">Algorithm Settings</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        <div class="row mb-4">
+                            <div class="col-xl-12">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">Algorithm Settings</h5>
+                                            <div class="table-responsive mt-4">
+                                                <div id="alertContainer56"></div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Conversion rate:                                                     <button type="button" class="btn" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="If a user will send gift for example (10 coins) it will be multiplied by the conversion rate defined in this field.
+                                                        So, it will add the converted diamonds to the other user's wallet.">
+                                                        <i class="uil-comment-info"></i>
+                                                    </button></p> 
+                                                    <input type="text" class="form-control" id="conversionRate" value="<%= config.conversion_rate || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Conversion rate of coins: <button type="button" class="btn" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="If a user withdraw's his diamonds, the diamonds will divide with conversion rate of (coins to dollar) defined in this field.">
+                                                        <i class="uil-comment-info"></i>
+                                                    </button></p>
+                                                    <input type="text" class="form-control" id="conversionRateCoin" value="<%= config.conversion_rate_per_coin || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Minimum withdrawl:</p>
+                                                    <input type="text" class="form-control" id="withdrawl" placeholder="Minimum withdrawl" value="<%= config.minimum_withdrawal || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Refferal reward:</p>
+                                                    <input type="text" class="form-control" id="reffReward" placeholder="Refferal Reward" value="<%= config.refferal_reward || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Commision (%):</p>
+                                                    <input type="text" class="form-control" id="commision" placeholder="Refferal Reward" value="<%= config.commision || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Video boost per day:</p>
+                                                    <input type="text" class="form-control" id="boostPerDay" placeholder="Boost per day" value="<%= config.boost_per_day  || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Ad boost per view:</p>
+                                                    <input type="text" class="form-control" id="boostPerView" placeholder="Boost per view" value="<%= config.boost_per_view  || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Ad algorithm:</p>
+                                                    <select class="form-control form-select" id="adAlgo">
+                                                        <option value="After 5 videos" <%= config.boost_video == 'After 5 videos' ? 'selected' : '' %>>After 5 videos</option>
+                                                        <option value="After 10 videos" <%= config.boost_video == 'After 10 videos' ? 'selected' : '' %>>After 10 videos</option>
+                                                        <option value="On app open" <%= config.boost_video == 'On app open' ? 'selected' : '' %>>On app open</option>
+                                                </select>                                                
+                                            </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="btnSaveAlgo" class="btn btn-primary waves-effect waves-light w-md">Save</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        <% } %>
+                    </div> <!-- container-fluid -->
+                </div>
+            <!-- end main content-->
+            <%- include('../partials/footer') %>
+        </div>
+        <!-- END layout-wrapper -->
+
+
+        <!-- Right Sidebar -->
+        <%- include('../partials/right_sidebar') %>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="assets/libs/jquery/jquery.min.js"></script>
+        <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="assets/libs/node-waves/waves.min.js"></script>
+        <script src="assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+        <script src="../assets/js/search.js"></script>
+        <!-- apexcharts -->
+        <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <script src="assets/js/pages/dashboard.init.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+<script>
+
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#btnSaveAlgo").click(function(){
+        var conversionRate = $('#conversionRate').val();
+        var conversionRateCoin = $('#conversionRateCoin').val();
+        var minWithdraw = $('#withdrawl').val();
+        var videoPerDay = $('#boostPerDay').val();
+        var boostPerView = $('#boostPerView').val();
+        var adAlgo = $('#adAlgo').val();
+        var reffReward = $('#reffReward').val();
+        var commision = $('#commision').val();
+        saveAlgo(conversionRate, minWithdraw, videoPerDay, adAlgo, reffReward, boostPerView, commision, conversionRateCoin);
+
+     });
+    });
+    async function saveAlgo(conversionRate, minWithdraw, videoPerDay, adAlgo, reffReward, boostPerView, commision, conversionRateCoin) {
+      $('#alertContainer56').empty();
+
+       $('#btnSaveAlgo').addClass("disabled");
+        $('#btnSaveAlgo').html('Saving');
+
+      $.ajax({
+        type: "POST",
+        url: "/admin/saveAlgorithm",
+        data: {
+            conversionRate: conversionRate,
+            minWithdraw: minWithdraw,
+            reffReward: reffReward,
+            videoPerDay: videoPerDay,
+            adAlgo : adAlgo,
+            boostPerView: boostPerView,
+            commision: commision,
+            conversionRateCoin: conversionRateCoin
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnSaveAlgo').removeClass("disabled");
+                 $('#btnSaveAlgo').html('Save');
+
+                $('#alertContainer56').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer56 .alert').hide();
+                }, 1000); 
+                }
+        },
+        dataType: "json",
+      });
+    }
+
+</script>
+    </body>
+
+</html>

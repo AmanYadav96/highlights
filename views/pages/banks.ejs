@@ -1,0 +1,289 @@
+<%- include('../partials/head', {titleName: "Finance"}) %>
+ 
+    <body data-sidebar="dark" data-layout-mode="dark" data-topbar="light">
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+        <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="alertContainer"></div>
+                    Are you sure you want to delete?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeModal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteSticker">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../partials/page_top') %>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <%- include('../partials/side_menu', {selected: 24}) %>
+            <!-- Left Sidebar End -->
+
+            
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <% if (user.power == 0) { %>
+                                <div class="col-12">
+                                  <div class="alert alert-warning" role="alert">
+                                    This is a demo account. Any changes you make will not be saved.
+                                  </div>
+                                </div>
+                              <% } %>
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">Banks</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body" style="padding: 0px;">
+                                        <div class="row mb-2" style="margin-top: 20px; margin-left: 10px;">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addUser"><i class="mdi mdi-plus me-1"></i> Add Bank</button>                                               
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div data-simplebar>
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless table-centered table-nowrap">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Logo</th>
+                                                            <th>Bank Name</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tableBody">
+                                                        <% for(let i=0; i<banks.length; i++) {%>
+                                                            <% const element = banks[i]; %>
+                                                        <tr>
+                                                            <td style="width: 10px;"><%= i +1%></td>
+                                                             <td><img src="<%= element.logo %>" class="rounded" width="50"></td>
+                                                             <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.name %></h6></td>
+                                                             <td class="text-muted fw-semibold text-center"><i class="icon-xs icon me-2 text-success" data-feather="trending-up"></i>
+                                                                <a onclick="deleteUser(this, '<%= element.id %>')" class="btn btn-outline-danger btn-sm edit" title="Delete">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <% }%>
+                                                    </tbody>
+                                                </table>
+                                            </div> <!-- enbd table-responsive-->
+                                        </div> <!-- data-sidebar-->
+                                    </div><!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div>
+                        </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header py-3 px-4 border-bottom-0">
+                                <h5 class="modal-title" id="modal-title">Add Bank</h5>
+                                <button type="button" class="btn-close" aria-hidden="true" id="btnCloseModal" data-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body p-4">                                        
+                                <div class="needs-validation" novalidate>
+                                    <div class="row">
+                                        <div id="alertContainer"></div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bank Name</label>
+                                                <input type="text" class="form-control" id="name" placeholder="Enter Name" required>
+                                                <div class="invalid-feedback">
+                                                    Enter Bank Name
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Logo</label>
+                                                <input type="file" class="form-control" id="picture">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12 text-end">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <button class="btn btn-success" id="btnSave">Save</button>
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div> 
+                        <!-- end modal-content-->
+                    </div>
+                </div>
+
+            </div>
+            <!-- end main content-->
+            <%- include('../partials/footer') %>
+        </div>
+        <!-- END layout-wrapper -->
+
+        
+
+        <!-- Right Sidebar -->
+        <%- include('../partials/right_sidebar') %>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="../assets/libs/jquery/jquery.min.js"></script>
+        <script src="../assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="../assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="../assets/libs/node-waves/waves.min.js"></script>
+        <script src="../assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="../assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+        <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+        <script src="../assets/js/search.js"></script>
+        <script src="../assets/js/pages/dashboard.init.js"></script>
+
+        <!-- App js -->
+        <script src="../assets/js/app.js"></script>   
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- App js -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="assets/libs/parsleyjs/parsley.min.js"></script>
+        <script src="assets/js/pages/form-validation.init.js"></script>
+        <script>
+        $('#closeModal').click(function () {
+            $('#deleteUser').modal('hide');
+        });
+            $(document).ready(function() {  
+           $('#alertContainer').empty();
+                $("#btnSave").click(function(){
+                var name = $("#name").val();
+                var picture = $("#picture").prop('files');
+        
+                uploadData(name, picture);
+        
+             });
+            });
+            async function uploadData(name, picture) {
+              $('#alertContainer').empty();
+        
+              const formData = new FormData();
+        
+                // Add the form fields and values
+                formData.append('name', name);
+                formData.append('picture', picture[0]);
+
+                $('#btnSave').addClass("disabled");
+                $('#btnSave').html('Saving..');
+        
+              $.ajax({
+                type: "POST",
+                url: "addBank",
+                data:  formData,
+                success: function (res) {
+                    if (res.status === 'success') {
+                        window.location.reload();
+                        $('#addUser').modal('hide');
+                        $("#name").val('');
+                        $('#btnSave').removeClass("disabled");
+                        $('#btnSave').html('Save');
+                        
+                        $('#alertContainer').html(`
+                            <div class="alert alert-success" role="alert">
+                                ${res.message}
+                            </div>
+                        `);
+                        setTimeout(function () {
+                            $('#alertContainer .alert').hide();
+                        }, 2000); 
+                        }
+                },
+                // Set the content type to multipart/form-data
+                contentType: false,
+                // Set the processData option to false to prevent jQuery from trying to convert the FormData object to a string
+                processData: false,
+                dataType: 'json',
+              });
+            }
+            function deleteUser(element, reportId) {
+                $('#deleteUser').modal('show');
+                var id = reportId;
+                let btn = element;
+                console.log(btn);
+                $('#deleteSticker').click(function () {
+                    $.ajax({
+                        url: 'deleteBank',
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function (res) {
+                            if (res.status === 'success') {
+                                $('#deleteUser').modal('hide');
+                                btn.parentNode.parentNode.remove();
+                                $('#alertContainer').html(`
+                                <div class="alert alert-success" role="alert">
+                                        ${res.message}
+                                </div>
+                            `);
+                    setTimeout(function () {
+                            $('#alertContainer .alert').hide();
+                        }, 2000);
+                    }
+                        },
+                        dataType: "json",
+                    });
+                });
+            }
+            function appendRow(element, i) {
+                $('#tableBody').append(`
+                    <tr>
+                        <td style="width: 10px;">${i + 1}</td>
+                        <td><img src="${element.picture}" class="rounded" width="50"></td>
+                        <td><h6 class="font-size-15 mb-1 fw-normal">${element.name}</h6></td>
+                        <td class="text-muted fw-semibold text-center">
+                            <i class="icon-xs icon me-2 text-success" data-feather="trending-up"></i>
+                            <a onclick="deleteUser(this, '${element.id}')" class="btn btn-outline-danger btn-sm edit" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                `);
+            }
+            
+        
+        </script>
+    </body>
+
+</html>

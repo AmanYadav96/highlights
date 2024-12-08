@@ -1,0 +1,302 @@
+<%- include('../partials/head', {titleName: "Levels"}) %>
+ 
+    <body data-sidebar="dark" data-layout-mode="dark" data-topbar="light">
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+        <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="alertContainer"></div>
+                    Are you sure you want to delete?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeModal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteSticker">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../partials/page_top') %>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <%- include('../partials/side_menu', {selected: 11}) %>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                          <% if (user.power == 0) { %>
+                            <div class="col-12">
+                              <div class="alert alert-warning" role="alert">
+                                This is a demo account. Any changes you make will not be saved.
+                              </div>
+                            </div>
+                          <% } %>
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">Level XP Settings</h4>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body"  style="padding: 0px;">
+                                        <div class="row mb-2" style="margin-top: 20px; margin-left: 10px;">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addUser"><i class="mdi mdi-plus me-1"></i> Add XP</button>                                               
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div data-simplebar>
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless table-centered table-nowrap">
+                                                    <thead class="table-light">
+                                                        <tr>                                                
+                                                            <th>Name</th>
+                                                            <th>XP</th>
+                                                            <th>Description</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% for(const [name, xpValue] of Object.entries(xp)) { %>
+                                                        <% if(xpValue) { %>
+                                                        <tr>
+                                                            <td><h6 class="font-size-15 mb-1 fw-normal"><%= name %></h6></td>
+                                                            <td><h6 class="font-size-15 mb-1 fw-normal"><%= xpValue %></h6></td>
+                                                            <td><h6 class="font-size-15 mb-1 fw-normal">
+                                                                <% if(name === 'buying_coins') { %>
+                                                                    <p>User will receive Xp for buying coins</p>
+                                                                <% } %>
+                                                                <% if(name === 'community_post') { %>
+                                                                    <p>User will receive Xp for posting in community</p>
+                                                                <% } %>
+                                                                <% if(name === 'doing_live_stream_two_days') { %>
+                                                                    <p>User will receive Xp for live streaming consecutive 2 days</p>
+                                                                <% } %>
+                                                                <% if(name === 'doing_live_stream') { %>
+                                                                    <p>User will receive Xp for live streaming</p>
+                                                                <% } %>
+                                                                <% if(name === 'sending_gifts') { %>
+                                                                    <p>User will receive Xp for sending gifts</p>
+                                                                <% } %>
+                                                                <% if(name === 'video_upload') { %>
+                                                                    <p>User will receive Xp for uploading videos</p>
+                                                                <% } %>
+                                                            </h6></td>
+                                                            <td class="text-muted fw-semibold text-center"><i class="icon-xs icon me-2 text-success" data-feather="trending-up"></i>
+                                                            <a onclick="deleteUser(this, '<%= name %>')" class="btn btn-outline-danger btn-sm edit" title="Delete">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </a>
+                                                            </td>
+                                                        </tr>
+                                                        <% } %>
+                                                        <% } %>
+                                                    </tbody>
+                                                </table>
+                                            </div> <!-- enbd table-responsive-->
+                                        </div> <!-- data-sidebar-->
+                                    </div><!-- end card-body-->
+                                </div> 
+                                <!-- end card-->
+                            </div>
+                        </div> <!-- container-fluid -->
+                    </div> <!-- container-fluid -->
+                </div>
+            <!-- end main content-->
+            <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header py-3 px-4 border-bottom-0">
+                            <h5 class="modal-title" id="modal-title">Add XP</h5>
+                            <button type="button" class="btn-close" aria-hidden="true" id="btnCloseModal" data-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body p-4">                                        
+                            <div class="needs-validation" novalidate>
+                                <div class="row">
+                                    <div id="alertContainer"></div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Enter XP</label>
+                                            <input type="text" id="xp_value" class="form-control" placeholder="Enter XP (Only numbers)" required>
+                                            <div class="invalid-feedback">
+                                                Enter XP
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mt-4">
+                                            <p class="mb-1">Select XP for:</p>
+                                            <select class="form-control form-select" id="xp_name">
+                                                <option value="video_upload">Video upload</option>
+                                                <option value="buying_coins">Buying coins</option>
+                                                <option value="community_post">Community post</option>
+                                                <option value="doing_live_stream">Doing a live stream</option>
+                                                <option value="doing_live_stream_two_days">Doing live stream two days in a row</option>
+                                                <option value="sending_gifts">Sending gifts</option>                                                        
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-secondary" id="closeM" onclick="closeModal()" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-success" id="btnSave">Save</button>
+                                    </div>
+                                </div>
+                            </div>   
+                        </div>
+                    </div> 
+                    <!-- end modal-content-->
+                </div>
+            </div>
+            <%- include('../partials/footer') %>
+        </div>
+        <!-- END layout-wrapper -->
+
+        <!-- Right Sidebar -->
+        <%- include('../partials/right_sidebar') %>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="../assets/libs/jquery/jquery.min.js"></script>
+        <script src="../assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="../assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="../assets/libs/node-waves/waves.min.js"></script>
+        <script src="../assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="../assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+        <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+        <script src="../assets/js/search.js"></script>
+        <script src="../assets/js/pages/dashboard.init.js"></script>
+
+        <!-- App js -->
+        <script src="../assets/js/app.js"></script>   
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- App js -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="assets/libs/parsleyjs/parsley.min.js"></script>
+        <script src="assets/js/pages/form-validation.init.js"></script>
+        <script>
+                        $('#closeModal').click(function () {
+                $('#deleteUser').modal('hide');
+            });
+$(document).ready(function() {  
+  $('#alertContainer').empty();
+  $("#btnSave").click(function(){
+    var xpValue = $("#xp_value").val();
+    var xpName = $("#xp_name").val();
+    updateData(xpValue, xpName);
+  });
+});
+
+const xpInput = document.getElementById('xp_value');
+
+xpInput.addEventListener('input', function() {
+  // Remove non-numeric characters
+  this.value = this.value.replace(/\D/g, '');
+});
+
+async function updateData(xpValue, xpName) {
+
+  $('#alertContainer').empty();
+
+  $('#btnSave').addClass("disabled");
+  $('#btnSave').html('Saving..');
+
+  $.ajax({
+    type: "POST",
+    url: "setXp",
+    data:  {
+        xpValue: xpValue,
+        xpName: xpName
+    },
+    success: function (res) {
+      if (res.status === 'success') {
+        window.location.reload();
+        $('#btnUpdate').removeClass("disabled")
+        $('#btnUpdate').html('Update');
+        $('#alertContainer').html(`
+          <div class="alert alert-success" role="alert">
+            ${res.message}
+          </div>
+        `);
+        setTimeout(function () {
+          $('#alertContainer .alert').hide();
+        }, 1000); 
+      } else {
+        $('#alertContainer').html(`
+          <div class="alert alert-danger" role="alert">
+            ${res.message}
+          </div>
+        `);
+      }
+    },
+    dataType: 'json',
+  });
+}
+function deleteUser(element, reportId) {
+                $('#deleteUser').modal('show');
+                var xpName = reportId;
+                var xpValue = 0;
+                let btn = element;
+                console.log(xpName);
+                $('#deleteSticker').click(function () {
+                    $.ajax({
+                        url: 'deleteXp',
+                        type: 'POST',
+                        data: {
+                            xpName: xpName,
+                            xpValue: xpValue
+                        },
+                        success: function (res) {
+                            if (res.status === 'success') {
+                                $('#deleteUser').modal('hide');
+                                btn.parentNode.parentNode.remove();
+                                $('#alertContainer').html(`
+                                <div class="alert alert-success" role="alert">
+                                        ${res.message}
+                                </div>
+                            `);
+                            setTimeout(function () {
+                                    $('#alertContainer .alert').hide();
+                                }, 2000);
+                            }
+                        },
+                        dataType: "json",
+                    });
+                });
+            }
+function showImageInNewTab() {
+  console.log(imageUrl);
+    var imageUrl = document.getElementById('document').value;
+    window.open(imageUrl);
+}
+
+        </script>
+    </body>
+
+</html>

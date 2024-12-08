@@ -1,0 +1,187 @@
+<div class="vertical-menu">
+
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <a href="/admin" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="<%= appLogo %>" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="<%= appLogo %>" alt="" height="22">
+            </span>
+        </a>
+
+        <a href="/admin" class="logo logo-light">
+            <span class="logo-sm">
+                <img src="<%= appLogo %>" alt="" height="22" onerror="throw new Error('Image failed to load.');">
+            </span>
+            <span class="logo-lg">
+                <img src="<%= appLogo %>" alt="" height="22">
+            </span>
+        </a>
+    </div>
+
+    <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect vertical-menu-btn">
+        <i class="fa fa-fw fa-bars"></i>
+    </button>
+
+    <div data-simplebar class="sidebar-menu-scroll">
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Menu</li>
+                <li <% if (selected == 0) { %> class="active" <% } %>>
+                    <a href="/admin/">
+                        <i class="uil-home-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li <% if (selected == 2) { %> class="active mm-active" <% } %>>
+                    <a href="/admin/administrators" class="waves-effect">
+                        <i class="uil-window-section"></i>
+                        <span>Administrators</span>
+                    </a>
+                </li>
+
+                <li <% if (selected == 1) { %> class="active mm-active" <% } %>>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-users-alt"></i>
+                        <span>User Management</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/users">Users</a></li>
+                        <li><a href="/admin/reports_users">Reports</a></li>
+                    </ul>
+                </li>
+                
+                <li <% if (selected == 3) { %> class="active mm-active" <% } %>>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-video"></i>
+                        <span>Shorts</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/videos">Videos</a></li>
+                        <li><a href="/admin/comments">Comments</a></li>
+                        <li><a href="/admin/reports">Reports</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-music-note"></i>
+                        <span>Music Management</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/sound_categories">Categories</a></li>
+                        <li><a href="/admin/sounds">Sounds</a></li>
+                    </ul>
+                </li> 
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-monitor"></i>
+                        <span>Streaming</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/livestreams">Live</a></li>
+                    </ul>
+                </li>
+
+                <li <% if (selected == 21) { %> class="active mm-active" <% } %>>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-dollar-sign"></i>
+                        <span>Monetisation</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/packages">Coin Packages</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-gift"></i>
+                        <span>Gifts</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/gift_catogories">Categories</a></li>
+                        <li><a href="/admin/gifts">Gifts</a></li>
+                    </ul>
+                </li> 
+
+                <li <% if (selected == 11) { %> class="active mm-active" <% } %>>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-graph-bar"></i>
+                        <span>Levels</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/levels">Levels</a></li>
+                        <li><a href="/admin/levels_xp">XP settings</a></li>
+                    </ul>
+                </li> 
+
+                <li <% if (selected == 12) { %> class="active mm-active" <% } %>>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-bolt-alt"></i>
+                        <span>Advertisement</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/banners">Banners</a></li>
+                        <li><a href="/admin/notifications">Notifications</a></li>
+                    </ul>
+                </li>
+
+                <li <% if (selected == 23) { %> class="active mm-active" <% } %>>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-wallet"></i>
+                        <span>Finance</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/banks">Add Bank</a></li>
+                        <li><a href="/admin/withdrawal_requests">Withdrawals</a></li>
+                        <li><a href="/admin/transactions">Transactions</a></li>
+                    </ul>
+                </li> 
+
+                <li <% if (selected == 5) { %> class="active mm-active" <% } %>>
+                    <a href="/admin/report_reason" class="waves-effect">
+                        <i class="uil-ban"></i>
+                        <span>Report Reasons</span>
+                    </a>
+                </li>
+
+                <li <% if (selected == 18) { %> class="active mm-active" <% } %>>
+                    <a href="/admin/verification_requests" class="waves-effect">
+                        <i class="uil-comment-verify"></i>
+                        <span>Verification Requests</span>
+                    </a>
+                </li>
+
+                <li <% if (selected == 15) { %> class="active mm-active" <% } %>>
+                    <a href="/admin/tags" class="waves-effect">
+                        <i class="uil-tag"></i>
+                        <span>Tags</span>
+                    </a>
+                </li>
+
+                <li <% if (selected == 17) { %> class="active mm-active" <% } %>>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-wrench"></i>
+                        <span>Settings</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/admin/agora_settings">Agora Settings</a></li>
+                        <li><a href="/admin/cdn_settings">CDN settings</a></li>
+                        <li><a href="/admin/algorithm_settings">Algorithm settings</a></li>
+                        <li><a href="/admin/server_settings">Server settings</a></li>
+                        <li><a href="/admin/app_settings">App settings</a></li>
+                        <li><a href="/admin/password_settings">Change password</a></li>
+                    </ul>
+                </li> 
+
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>

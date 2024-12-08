@@ -1,0 +1,762 @@
+<%- include('../partials/head', {titleName: "User Management"}) %>
+ 
+    <body data-sidebar="dark" data-layout-mode="dark" data-topbar="light">
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+        <div class="modal fade" id="deleteAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Remove</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="alertContainer"></div>
+                    Are you sure you want to revoke?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeModal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteSticker1">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteFeatured" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm Remove</h5>
+            </div>
+            <div class="modal-body">
+                <div id="alertContainer"></div>
+                Are you sure you want to remove?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="closeModal3">Cancel</button>
+                <button type="button" class="btn btn-danger" id="deleteFeaturedUser">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="modal fade" id="addFeatured" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Add</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="alertContainer"></div>
+                    Are you sure you want to add?
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-secondary" id="closeAddFeatured">Cancel</a>
+                    <button type="button" class="btn btn-success" id="addFeaturedUser">Yes</button>
+                </div>
+            </div>
+        </div>
+        </div>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../partials/page_top') %>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <%- include('../partials/side_menu', {selected: 0}) %>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <% if (user.power == 0) { %>
+                                <div class="col-12">
+                                  <div class="alert alert-warning" role="alert">
+                                    This is a demo account!. Changes will not be made.
+                                  </div>
+                                </div>
+                              <% } %>
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">User Details</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        <div class="row mb-4">
+                            <div class="col-xl-5">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <div class="clearfix"></div>
+                                            <div>
+                                                <img src="<%= users.profilePicture ? users.profilePicture : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png' %>" alt="" class="avatar-lg rounded-circle img-thumbnail">
+                                            </div>
+                                            <h5 class="mt-3 mb-1"><%= users.name %></h5>
+                                            <p class="text-muted"><%= users.username %></p>
+                                        </div>
+
+                                        <hr class="my-4">
+
+                                        <div class="text-muted">
+                                            <h5 class="font-size-16">Details</h5>
+                                            
+                                            <div class="table-responsive mt-4">                               
+                                            <div id="alertContainer"></div>
+                                            <div id="alertContainer1"></div>
+                                            <div id="alertContainer3"></div>
+                                            <input type="text" id="id" class="form-control" value="<%= users.id %>" hidden>
+                                                <div>
+                                                    <p class="mb-1">Name :</p>
+                                                    <input type="text" class="form-control" id="name" value="<%= users.name %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Username :</p>
+                                                    <input type="text" class="form-control" id="username" value="<%= users.username %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">About :</p>
+                                                    <input type="text" class="form-control" id="about" value="<%= users.about %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Picture :</p>
+                                                    <input type="file" class="form-control" id="picture" value="<%= users.phone %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Email :</p>
+                                                    <input type="text" class="form-control" id="email" value="<%= users.email %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Coins :</p>
+                                                    <input type="text" class="form-control" id="coins" value="<%= users.coins %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Gems :</p>
+                                                    <input type="text" class="form-control" id="gems" value="<%= users.gems %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Credit :</p>
+                                                    <input type="text" class="form-control" id="credit" value="<%= users.credit %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Facebook :</p>
+                                                    <input type="text" class="form-control" id="fbUrl" value="<%= users.facebook %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Instagram :</p>
+                                                    <input type="text" class="form-control" id="instaUrl" value="<%= users.instagram %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Twitter :</p>
+                                                    <input type="text" class="form-control" id="twtUrl" value="<%= users.twitter %>">
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" class="btn btn-primary waves-effect waves-light w-md" id="btnUpdate">Update</a>
+                                                    <% if (users.isAdmin === 0) { %>
+                                                        <a onclick="addAdmin(this, '<%= users.id %>')" type="submit" class="btn btn-danger waves-effect waves-light w-md" id="adminBtn">Assign Admin</a>
+                                                    <% } else if(users.isAdmin === 1) {%>    
+                                                       <a onclick="deleteAdmin(this, '<%= users.id %>')" type="submit" class="btn btn-danger waves-effect waves-light w-md" id="adminBtn1">Revoke Admin</a>
+                                                    <% } %>     
+                                                    <% if (users.isFeatured === 0) { %>
+                                                        <a onclick="addFeatured(this, '<%= users.id %>')" type="submit" class="btn btn-success waves-effect waves-light w-md" id="ftBtn">Make Featured</a>
+                                                    <% } else if(users.isFeatured === 1) {%>    
+                                                       <a onclick="deleteFeatured(this, '<%= users.id %>')" type="submit" class="btn btn-success waves-effect waves-light w-md" id="ftBtn1">Remove Featured</a>
+                                                    <% } %>                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-7">
+                                <div class="card mb-10">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#abouts" role="tab">
+                                                <i class="uil-video font-size-20"></i>
+                                                <span class="d-none d-sm-block">Videos</span> 
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tasks" role="tab">
+                                                <i class="uil uil-comments-alt font-size-20"></i>
+                                                <span class="d-none d-sm-block">Communities</span> 
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#messages" role="tab">
+                                                <i class="uil-comments-alt font-size-20"></i>
+                                                <span class="d-none d-sm-block">Comments</span>   
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- Tab content -->
+                                    <div class="tab-content p-0">
+                                        <div class="tab-pane active" id="abouts" role="tabpanel">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-xl-12">
+                                                        <div class="row gap-0">
+                                                            <% if (users.videos.length === 0) { %>
+                                                               <div class="row" style="text-align: center; padding-top: 20px; padding-bottom: 20px;">
+                                                                <h6>There are no videos yet.</h6>
+                                                               </div>
+                                                              <% } else { %>
+                                                            <% for(let i=0; i<users.videos.length; i++) {%>
+                                                                <% const element = users.videos[i]; %>
+                                                            <div class="col-lg-2" style="padding-top: 5px; padding-left: 5px;">
+                                                                <div class="card shadow-none border mb-4">
+                                                                    <img src="<%= element.videoGifUrl ? element.videoGifUrl : 'https://media.gettyimages.com/id/174525228/photo/karachi.jpg?s=612x612&w=gi&k=20&c=5ad_H028O7B9Lg8ij8My07xFtEFa0uRej8EmugwiVwg=' %>" 
+                                                                    class="card-img-top" alt="" style="height: 200px;">                                   
+                                                                    <div class="card-body">
+                                                                        <h5 class="card-title"><%= element.title %></h5>
+                                                                        <p class="card-text"><%= element.tags %></p>
+                                                                    </div>
+                                                                    <div style="text-align: center; padding-bottom: 15px;">
+                                                                        <a href="<%= element.videoUrl %>" target="_blank" class="btn btn-success"><i class="uil uil-eye font-size-12"></i></a>
+
+                                                                        <a href="/admin/edit_videos?id=<%= element.id %>" class="btn btn-primary"><i class="uil uil-pen font-size-12"></i></a>
+                                                                        
+                                                                        <a href="#" onclick="deleteUser(this, '<%= element.id %>')"class="btn btn-danger"><i class="uil uil-trash-alt font-size-12"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                             <% }%>
+                                                            <% }%>
+                                                        </div><!-- end card -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="tasks" role="tabpanel">
+                                            <div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-borderless table-centered table-wrap">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th></th>
+                                                                <th>User Name</th>
+                                                                <th>Post Caption</th>
+                                                                <th>Likes</th>
+                                                                <th>Comments</th>
+                                                                <th>Shares</th>
+                                                                <th>Gifts</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>                                                            
+                                                            <% for(let i=0; i<users.communities.length; i++) {%>
+                                                                <% const element = users.communities[i]; %>
+                                                            <tr>
+                                                                <td style="width: 10px;"><%= i +1%></td>
+                                                                 <td><img src="<%= element.profilePicture ? element.profilePicture : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png' %>"  class="avatar-xs rounded-circle" width="50"></td>
+                                                                 <td style="width: 200px;"><h6 class="font-size-15 mb-1 fw-normal nowrap"><%= element.name %></h6></td>
+                                                                 <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.caption %></h6></td>
+                                                                 <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.likes %></h6></td>
+                                                                 <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.comments %></h6></td>
+                                                                 <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.shares %></h6></td>
+                                                                 <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.gifts %></h6></td>
+
+                                                            </tr>
+                                                            <% }%>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="messages" role="tabpanel">
+                                            <div>
+                                            <!-- end .border-->
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless table-centered table-nowrap">
+                                                    <thead class="table-light">
+                                                        <tr>     
+                                                            <th>#</th>                                                       
+                                                            <th></th>
+                                                            <th>User Name</th>
+                                                            <th>Comment</th>
+                                                            <th>Total Replies</th>
+                                                            <th>Comment Time</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% for(let i=0; i<users.comments.length; i++) {%>
+                                                            <% const element = users.comments[i]; %>
+                                                        <tr>
+                                                            <td style="width: 10px;"><%= i +1%></td>
+                                                            <td style="width: 60px;"><img src="<%= element.profilePicture ? element.profilePicture : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png' %>" class="avatar-xs rounded-circle"></td>
+                                                            <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.name %></h6></td>
+                                                            <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.comment %></h6></td>
+                                                            <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.replies %></h6></td>
+                                                            <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.commentTime %></h6></td>
+                                                        </tr>
+                                                        <% }%>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% if (users.isCreator === 1) { %>
+                                <div class="card mb-20">
+                                    <div class="card-body">
+                                      <h5 class="mb-0">Creator Details</h5>
+                                        <div class="text-muted">
+                                            <div class="table-responsive mt-4 mb-4">                               
+                                            <div id="alertContainer"></div>
+                                                  <input type="text" id="id" class="form-control" value="<%= users.subscriptions ? users.subscriptions.id : 0 %>" hidden>
+                                                  <input type="text" id="userId" class="form-control" value="<%= users.subscriptions ?  users.subscriptions.user_id : 0 %>" hidden>
+                                                  <div class="mt-4">
+                                                    <div class="hstack gap-3">
+                                                        <p class="mb-1" style="width: 49%">First Name:</p>
+                                                        <p class="mb-1" style="width: 49%">Last Name:</p>
+                                                    </div>
+                                                    <div class="hstack gap-3">
+                                                        <input type="text" id="accAddress" class="form-control" value="<%= users.subscriptions ? users.subscriptions.first_name : '' %>" disabled>                                                        
+                                                        <input type="text" id="accAddressPort" class="form-control" value="<%= users.subscriptions ? users.subscriptions.last_name : '' %>" disabled>                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Subscription On :</p>
+                                                    <input type="text" class="form-control" id="document" value="<%= users.subscriptions ? users.subscriptions.isSubscription === 1 ? "Yes" : "No" : '' %>" disabled>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Subscription Amount :</p>
+                                                    <input type="text" class="form-control" id="document" value="<%= users.subscriptions ? users.subscriptions.monthly_subscriptions : '' %>" disabled>
+                                                </div>
+                                                  <div class="mt-4">
+                                                    <p class="mb-1">Email :</p>
+                                                    <input type="text" class="form-control" id="document" value="<%= users.subscriptions ? users.subscriptions.email : '' %>" disabled>
+                                                </div>
+                                                <div class="mt-4">
+                                                  <p class="mb-1">Address :</p>
+                                                  <input type="text" class="form-control" id="document" value="<%= users.subscriptions ? users.subscriptions.address : '' %>" disabled>
+                                                </div>
+                                                <div class="mt-4">
+                                                  <p class="mb-1">Bank Name :</p>
+                                                  <input type="text" class="form-control" id="document" value="<%= users.subscriptions ? users.subscriptions.bank_name : '' %>" disabled>
+                                                </div>
+                                                <div class="mt-4">
+                                                  <p class="mb-1">Account No. :</p>
+                                                  <input type="text" class="form-control" id="document" value="<%= users.subscriptions ? users.subscriptions.acc_no : '' %>" disabled>
+                                                </div>
+                                                <div class="mt-4">
+                                                  <p class="mb-1">IBAN No. :</p>
+                                                  <input type="text" class="form-control" id="document" value="<%= users.subscriptions ? users.subscriptions.iban_no : '' %>" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="alertContainer"></div>
+                                    Are you sure you want to delete?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" id="closeModal">Cancel</button>
+                                    <button type="button" class="btn btn-danger" id="deleteSticker">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div> 
+                    <div class="modal fade" id="addAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header py-3 px-4 border-bottom-0">
+                                    <h5 class="modal-title" id="modal-title">Make Admin</h5>
+                                    <a type="button" class="btn-close" aria-hidden="true" id="dismissModal"data-dismiss="modal"></a>
+                                </div>
+                                <div class="modal-body p-4">                                        
+                                    <!-- <form class="needs-validation" novalidate> -->
+                                        <div class="row">
+                                            <div id="alertContainer"></div>
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Username</label>
+                                                    <input type="text" class="form-control" id="usernameAdmin" placeholder="Enter Username" required>
+                                                    <div class="invalid-feedback">
+                                                        Enter Username
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Password</label>
+                                                    <input type="text" class="form-control" id="passwordAdmin" placeholder="Enter Password" required>
+                                                    <div class="invalid-feedback">
+                                                        Enter Password
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Assign Power</label>
+                                                    <select class="form-control select" id="power" required>
+                                                        <option value="1">Super Power</option>
+                                                        <option value="0">Demo</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        Enter Power
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-12 text-end">
+                                                <button type="button" class="btn btn-secondary" id="dismissModal1" data-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-success" id="btnAdmin">Save</button>
+                                            </div>
+                                        </div>
+                                    <!-- </form>    -->
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <!-- container-fluid -->
+                </div>
+            <!-- end main content-->
+            <%- include('../partials/footer') %>
+        </div>
+        <!-- END layout-wrapper -->
+
+        <!-- Right Sidebar -->
+        <%- include('../partials/right_sidebar') %>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+<!-- JAVASCRIPT -->
+<script src="../assets/libs/jquery/jquery.min.js"></script>
+<script src="../assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/libs/metismenu/metisMenu.min.js"></script>
+<script src="../assets/libs/simplebar/simplebar.min.js"></script>
+<script src="../assets/libs/node-waves/waves.min.js"></script>
+<script src="../assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="../assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+<script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+<script src="../assets/js/search.js"></script>
+<script src="../assets/js/pages/dashboard.init.js"></script>
+
+<!-- App js -->
+<script src="../assets/js/app.js"></script>   
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- App js -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="../assets/libs/parsleyjs/parsley.min.js"></script>
+<script src="../assets/js/pages/form-validation.init.js"></script>   
+        <script>
+            $('#dismissModal').click(function() {
+              $('#addAdmin').modal('hide');
+            });
+            $('#dismissModal1').click(function() {
+              $('#addAdmin').modal('hide');
+            });
+            $('#closeModal').click(function () {
+                $('#deleteUser').modal('hide');
+            });
+            $(document).ready(function() {  
+                $('#alertContainer').empty();
+                $("#btnUpdate").click(function(){
+                var id = $("#id").val();
+                var username = $("#username").val();
+                var name = $("#name").val();
+                var picture = $("#picture").prop('files');
+                var email = $("#email").val();
+                var about = $("#about").val();
+                var fbUrl = $("#fbUrl").val();
+                var coins = $("#coins").val();
+                var gems = $("#gems").val();
+                var credit = $("#credit").val();
+                var instaUrl = $("#instaUrl").val();
+                var twtUrl = $("#twtUrl").val();
+        
+                updateData(id, name, username, picture, email, about, fbUrl, instaUrl, twtUrl, coins, gems, credit);
+             });
+            });
+            async function updateData(id, name, username, picture, email, about, fbUrl, instaUrl, twtUrl, coins, gems, credit) {
+              $('#alertContainer3').empty();
+              $('#btnUpdate').addClass("disabled");
+              $('#btnUpdate').html('Updating..');
+
+              const formData = new FormData();
+        
+                // Add the form fields and values
+                formData.append('id', id);
+                formData.append('name', name);
+                formData.append('username', username);
+                formData.append('email', email);
+                formData.append('about', about);
+                formData.append('fbUrl', fbUrl);
+                formData.append('instaUrl', instaUrl);
+                formData.append('twtUrl', twtUrl);
+                formData.append('coins', coins);
+                formData.append('gems', gems);
+                formData.append('credit', credit);
+                formData.append('picture', picture[0]);
+
+                    $('#btnUpdate').addClass("disabled");
+                    $('#btnUpdate').html('Updating..');
+              $.ajax({
+                type: "POST",
+                url: "updateUser",
+                data:  formData,
+                success: function (res) {
+                    if (res.status === 'success') {
+                        $('#btnUpdate').removeClass("disabled")
+                        $('#btnUpdate').html('Update');
+                        
+                        $('#alertContainer3').html(`
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${res.message}
+                            </div>
+                        `);
+                        setTimeout(function () {
+                            $('#alertContainer3 .alert').hide();
+                        }, 1000); 
+                        }
+                },
+                error: {
+                    function (res){
+                        if (res.status === 'error') {
+                        $('#btnUpdate').removeClass("disabled")
+                        $('#btnUpdate').html('Update');
+                        }
+                    }
+                },
+                // Set the content type to multipart/form-data
+                contentType: false,
+                // Set the processData option to false to prevent jQuery from trying to convert the FormData object to a string
+                processData: false,
+                dataType: 'json',
+              });
+            }
+            function deleteUser(element, reportId) {
+                $('#deleteUser').modal('show');
+                var id = reportId;
+                let btn = element;
+                console.log(btn);
+                $('#deleteSticker').click(function () {
+                    $.ajax({
+                        url: 'deleteVideo',
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function (res) {
+                            if (res.status === 'success') {
+                                $('#deleteUser').modal('hide');
+                                btn.parentNode.parentNode.parentNode.remove();
+                                $('#alertContainer').html(`
+                                <div class="alert alert-success" role="alert">
+                                        ${res.message}
+                                </div>
+                            `);
+                        setTimeout(function () {
+                            $('#alertContainer .alert').hide();
+                        }, 2000);
+                    }
+                        },
+                        dataType: "json",
+                    });
+                });
+            }
+         
+            function addAdmin(element, id) {
+                $('#alertContainer4').empty();
+                $('#addAdmin').modal('show');
+                var id = id;
+                var password = $("#passwordAdmin").val();
+                var username = $("#usernameAdmin").val();
+                var power = $("#power").val();
+                var auth = Math.random().toString(36).substring(2);
+                let btn = element;
+
+                $('#btnAdmin').click(function () {
+                    var password = $("#passwordAdmin").val();
+                    var username = $("#usernameAdmin").val();
+
+                    if (!username || !password || !power) {
+                    $('#alertContainer').html(`
+                        <div class="alert alert-danger" role="alert">
+                        Please fill in all fields.
+                        </div>
+                    `);
+                    $('#alertContainer .alert').fadeOut(2000);
+                    return;
+                    }
+
+                    $('#btnAdmin').addClass("disabled");
+                    $('#btnAdmin').html('Saving..');
+                    $.ajax({
+                        url: 'addAdmin',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            password: password,
+                            username: username,
+                            power: power,
+                            auth: auth
+                        },
+                        success: function (res) {
+                            if (res.status === 'success') {
+                                 $('#btnAdmin').removeClass("disabled");
+                                 $('#btnAdmin').html('Save');
+                                 $('#adminBtn').html('Revoke Admin');
+                                 $('#addAdmin').modal('hide');
+                                $('#alertContainer1').html(`
+                                    <div class="alert alert-success" role="alert">
+                                        ${res.message}
+                                    </div>
+                                `);
+                                setTimeout(function () {
+                                    $('#alertContainer1 .alert').hide();
+                                }, 2000); 
+                                }
+                        },
+                        error: function (res) {
+                                 $('#btnAdmin').removeClass("disabled");
+                                 $('#btnAdmin').html('Save');
+
+                        },
+                        dataType: "json",
+                    });
+                });
+            }
+                $('#closeModal').click(function () {
+                $('#deleteAdmin').modal('hide');
+            });
+                function deleteAdmin(element, reportId) {
+                $('#deleteAdmin').modal('show');
+                var id = reportId;
+                let btn = element;
+                console.log(id);
+
+                $('#deleteSticker1').click(function () {
+                    console.log(id);
+                    $.ajax({
+                        url: 'removeAdmin',
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function (res) {
+                            if (res.status === 'success') {
+                                $('#deleteAdmin').modal('hide');
+                                $('#adminBtn1').html('Assign Admin');
+                                $('#alertContainer').html(`
+                                <div class="alert alert-success" role="alert">
+                                        ${res.message}
+                                </div>
+                            `);
+                            setTimeout(function () {
+                                    $('#alertContainer .alert').hide();
+                                }, 2000);
+                            }
+                        },
+                        dataType: "json",
+                    });
+                });
+            }
+            $('#closeModal3').click(function () {
+                $('#deleteFeatured').modal('hide');
+            });
+            function deleteFeatured(element, reportId) {
+                $('#deleteFeatured').modal('show');
+                var id = reportId;
+                let btn = element;
+
+                $('#deleteFeaturedUser').click(function () {
+                   
+                    $.ajax({
+                        url: 'deleteFeatured',
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function (res) {
+                            if (res.status === 'success') {
+                                $('#deleteFeatured').modal('hide');
+                                $('#ftBtn1').html('Make Featured');
+                                $('#alertContainer').html(`
+                                <div class="alert alert-success" role="alert">
+                                        ${res.message}
+                                </div>
+                            `);
+                            setTimeout(function () {
+                                    $('#alertContainer .alert').hide();
+                                }, 2000);
+                            }
+                        },
+                        dataType: "json",
+                    });
+                });
+            }
+            $('#closeAddFeatured').click(function () {
+                $('#addFeatured').modal('hide');
+            });
+            function addFeatured(element, reportId) {
+                $('#addFeatured').modal('show');
+                var id = reportId;
+                let btn = element;
+
+                $('#addFeaturedUser').click(function () {
+                    $.ajax({
+                        url: 'addFeatured',
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function (res) {
+                            if (res.status === 'success') {
+                                $('#addFeatured').modal('hide');
+                                $('#ftBtn').html('Remove Featured');
+                                $('#alertContainer').html(`
+                                <div class="alert alert-success" role="alert">
+                                        ${res.message}
+                                </div>
+                            `);
+                            setTimeout(function () {
+                                    $('#alertContainer .alert').hide();
+                                }, 2000);
+                            }
+                        },
+                        dataType: "json",
+                    });
+                });
+            }
+            function changeButtonText() {
+            // Get the button element
+            var button = document.getElementById("btnUpdate");
+            // Update the innerHTML of the button element with the spinner
+            button.innerHTML = '<div class="spinner-border text-light m-1" role="status"><span class="sr-only">Loading...</span></div>';
+            }
+        </script>
+    </body>
+</html>

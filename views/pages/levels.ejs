@@ -1,0 +1,442 @@
+<%- include('../partials/head', {titleName: "Levels"}) %>
+ 
+    <body data-sidebar="dark" data-layout-mode="dark" data-topbar="light">
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+        <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="alertContainer"></div>
+                    Are you sure you want to delete?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeModal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteSticker">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../partials/page_top') %>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <%- include('../partials/side_menu', {selected: 11}) %>
+            <!-- Left Sidebar End -->
+
+            
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <% if (user.power == 0) { %>
+                                <div class="col-12">
+                                  <div class="alert alert-warning" role="alert">
+                                    This is a demo account. Any changes you make will not be saved.
+                                  </div>
+                                </div>
+                              <% } %>
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">Levels</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body"  style="padding: 0px;">
+                                        <div class="row mb-2" style="margin-top: 20px; margin-left: 10px;">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addUser"><i class="mdi mdi-plus me-1"></i> Add Level</button>                                               
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div data-simplebar>
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless table-centered table-nowrap">
+                                                    <thead class="table-light">
+                                                        <tr>     
+                                                            <th>#</th>                                                       
+                                                            <th>Icon</th>
+                                                            <th>Level Name</th>
+                                                            <th>Level Number</th>
+                                                            <th>Level Frame</th>
+                                                            <!-- <th>Level Gif</th> -->
+                                                            <th>Level XP</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% for(let i=0; i<levels.length; i++) {%>
+                                                            <% const element = levels[i]; %>
+                                                        <tr>
+                                                             <td style="width: 10px;"><%= i +1%></td>
+                                                             <td style="width: 60px;"><img src="<%= element.levelIcon ?? '' %>" alt="" width="50" class="rounded"></td>
+                                                             <td><h6 class="font-size-15 mb-1 fw-normal" id="newName-<%= element.id %>"><%= element.levelName %></h6></td>
+                                                             <td><h6 class="font-size-15 mb-1 fw-normal" id="newNumber-<%= element.id %>"><%= element.levelNumber %></h6></td>
+                                                             <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.levelBadge %></h6></td>
+                                                             <!-- <td><h6 class="font-size-15 mb-1 fw-normal"><%= element.levelGif %></h6></td> -->
+                                                             <td><h6 class="font-size-15 mb-1 fw-normal" id="newLevelXP-<%= element.id %>"><%= element.levelXP %></h6></td>
+                                                             <td class="text-muted fw-semibold text-center">
+                                                                <i class="icon-xs icon me-2 text-success" data-feather="trending-up"></i>
+                                                                <a onclick="editUser(this, '<%= element.id %>', '<%= element.levelName %>',  '<%= element.levelNumber %>', '<%= element.levelXP %>')" type="button" class="btn btn-outline-primary btn-sm edit" title="Edit">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </a>
+                                                                <i class="icon-xs icon me-2 text-success" data-feather="trending-up"></i>
+                                                                <a onclick="deleteUser(this, '<%= element.id %>')" class="btn btn-outline-danger btn-sm edit" title="Delete">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <% }%>
+                                                    </tbody>
+                                                </table>
+                                            </div> <!-- enbd table-responsive-->
+                                        </div> <!-- data-sidebar-->
+                                    </div><!-- end card-body-->
+                                </div> 
+                                <!-- end card-->
+                            </div>
+                        </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                <div class="modal fade" id="editTitle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header py-3 px-4 border-bottom-0">
+                                <h5 class="modal-title" id="modal-title">Edit Gift Details</h5>
+                                <button type="button" class="btn-close" aria-hidden="true" id="btnCloseModal2" data-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body p-4">                                        
+                                <div class="needs-validation" novalidate>
+                                    <div class="row">
+                                        <div id="alertContainer"></div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Level Name</label>
+                                                <input type="text" class="form-control" id="lvlName" placeholder="Enter Level Name" required>
+                                                <div class="invalid-feedback">
+                                                    Enter Level Name
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Level Number</label>
+                                                <input type="number" class="form-control" id="lvlNumber" placeholder="Enter Level Limit" required>
+                                                <div class="invalid-feedback">
+                                                    Enter Level Number
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Level XP</label>
+                                                <input type="number" class="form-control" id="lvlXP" placeholder="Enter Level XP" required>
+                                                <div class="invalid-feedback">
+                                                    Enter Level XP
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12 text-end">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCloseModal23">Cancel</button>
+                                            <button type="button" class="btn btn-success" id="btnSaveTitle">Save</button>
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div> 
+                        <!-- end modal-content-->
+                    </div>
+                </div>
+
+                <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header py-3 px-4 border-bottom-0">
+                                <h5 class="modal-title" id="modal-title">Add Level</h5>
+                                <button type="button" class="btn-close" aria-hidden="true" id="btnCloseModal" data-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body p-4">                                        
+                                <div class="needs-validation" novalidate>
+                                    <div class="row">
+                                        <div id="alertContainer"></div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Level Name</label>
+                                                <input type="text" class="form-control" id="name" placeholder="Enter Name" required>
+                                                <div class="invalid-feedback">
+                                                    Enter Level Name
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Level Icon</label>
+                                                <input type="file" class="form-control" id="picture">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Level Frame</label>
+                                                <input type="file" class="form-control" id="badge">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Level Numer</label>
+                                                <input type="number" class="form-control" id="number" required>
+                                                <div class="invalid-feedback">
+                                                    Enter Level Numer
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Level XP</label>
+                                                <input type="number" class="form-control" id="levelXp" required>
+                                                <div class="invalid-feedback">
+                                                    Enter Level XP
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Level Color</label>
+                                                <input type="color" class="form-control" id="color" required>
+                                                <div class="invalid-feedback">
+                                                    Enter Level Color
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12 text-end">
+                                            <button type="button" class="btn btn-secondary" id="closeM" onclick="closeModal()" data-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-success" id="btnSave">Save</button>
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div> 
+                        <!-- end modal-content-->
+                    </div>
+                </div>
+
+            </div>
+            <!-- end main content-->
+            <%- include('../partials/footer') %>
+        </div>
+        <!-- END layout-wrapper -->
+
+        
+
+        <!-- Right Sidebar -->
+        <%- include('../partials/right_sidebar') %>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="../assets/libs/jquery/jquery.min.js"></script>
+        <script src="../assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="../assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="../assets/libs/node-waves/waves.min.js"></script>
+        <script src="../assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="../assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+        <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+        <script src="../assets/js/search.js"></script>
+        <script src="../assets/js/pages/dashboard.init.js"></script>
+
+        <!-- App js -->
+        <script src="../assets/js/app.js"></script>   
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- App js -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="assets/libs/parsleyjs/parsley.min.js"></script>
+        <script src="assets/js/pages/form-validation.init.js"></script>
+        <script>
+            $('#closeModal').click(function () {
+                $('#deleteUser').modal('hide');
+            });
+            $('#btnCloseModal2').click(function () {
+            $('#editTitle').modal('hide');
+        });
+        $('#btnCloseModal23').click(function () {
+            $('#editTitle').modal('hide');
+        });
+            $(document).ready(function() {  
+           $('#alertContainer').empty();
+                $("#btnSave").click(function(){
+                var name = $("#name").val();
+                var picture = $("#picture").prop('files');
+                var badge = $("#badge").prop('files');
+                var number = $("#number").val();
+                var levelXP = $("#levelXp").val();
+                var color = $("#color").val();
+
+                if (!name || !number || !levelXP || !color) {
+                    $('#alertContainer').html(`
+                        <div class="alert alert-danger" role="alert">
+                        Please fill in all fields.
+                        </div>
+                    `);
+                    $('#alertContainer .alert').fadeOut(2000);
+                    return;
+                    }
+        
+                uploadData(name, picture, badge, number, levelXP, color);
+        
+             });
+            });
+            async function uploadData(name, picture, badge, number, levelXP, color) {
+              $('#alertContainer').empty();
+        
+              const formData = new FormData();
+        
+                // Add the form fields and values
+                formData.append('name', name);
+                formData.append('number', number);
+                formData.append('levelXP', levelXP);
+                formData.append('color', color);
+                formData.append('picture', picture[0]);
+                formData.append('badge', badge[0]);
+
+                $('#btnSave').addClass("disabled");
+                $('#btnSave').html('Saving');
+        
+              $.ajax({
+                type: "POST",
+                url: "addLevel",
+                data:  formData,
+                success: function (res) {
+                    if (res.status === 'success') {
+                        window.location.reload();
+                        $('#btnSave').removeClass("disabled");
+                        $('#btnSave').html('Save');
+
+                        $('#alertContainer').html(`
+                            <div class="alert alert-success" role="alert">
+                                ${res.message}
+                            </div>
+                        `);
+                        setTimeout(function () {
+                            $('#alertContainer .alert').hide();
+                        }, 2000); 
+                        }
+                },
+                error: function (res) {
+                    $('#btnSave').removeClass("disabled");
+                     $('#btnSave').html('Save');
+                },
+                // Set the content type to multipart/form-data
+                contentType: false,
+                // Set the processData option to false to prevent jQuery from trying to convert the FormData object to a string
+                processData: false,
+                dataType: 'json',
+              });
+            }
+            function deleteUser(element, reportId) {
+                $('#deleteUser').modal('show');
+                var id = reportId;
+                let btn = element;
+                console.log(btn);
+                $('#deleteSticker').click(function () {
+                    $.ajax({
+                        url: 'deleteLevel',
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function (res) {
+                            if (res.status === 'success') {
+                                $('#deleteUser').modal('hide');
+                                btn.parentNode.parentNode.remove();
+                                $('#alertContainer').html(`
+                                <div class="alert alert-success" role="alert">
+                                        ${res.message}
+                                </div>
+                            `);
+                    setTimeout(function () {
+                            $('#alertContainer .alert').hide();
+                        }, 2000);
+                    }
+                        },
+                        dataType: "json",
+                    });
+                });
+            }
+
+            function editUser(element, reportId, levelName, levelNumber, levelXP) {
+        $('#editTitle').modal('show');
+        var id = reportId;
+        var levelName = levelName;
+        var levelNumber = levelNumber;
+        var levelXP = levelXP;
+        let btn = element;
+        $('#lvlName').val(levelName);
+        $('#lvlNumber').val(levelNumber);
+        $('#lvlXP').val(levelXP);
+        $('#btnSaveTitle').click(function () {
+           const NewLvelName =  $('#lvlName').val();
+           const NewLvelNumber =  $('#lvlNumber').val();
+           const NewLvelXP =  $('#lvlXP').val();
+            $.ajax({
+                url: 'editLevel',
+                type: 'POST',
+                data: {
+                    id: id,
+                    levelName: NewLvelName,
+                    levelNumber: NewLvelNumber,
+                    levelXP: NewLvelXP
+                },
+                success: function (res) {
+                    if (res.status === 'success') {
+                        $('#editTitle').modal('hide');
+                        $(`#newName-${id}`).text(NewLvelName);
+                        $(`#newNumber-${id}`).text(NewLvelNumber);
+                        $(`#newLevelXP-${id}`).text(NewLvelXP);
+                        $('#alertContainer').html(`
+                        <div class="alert alert-success" role="alert">
+                            ${res.message}
+                        </div>
+                    `);
+                setTimeout(function () {
+                    $('#alertContainer .alert').hide();
+                }, 2000);
+            }
+                },
+                dataType: "json",
+            });
+        });
+        }
+        
+        </script>
+
+    </body>
+
+</html>

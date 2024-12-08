@@ -1,0 +1,213 @@
+<%- include('../partials/head', {titleName: "Settings"}) %>
+ 
+    <body data-sidebar="dark" data-layout-mode="dark" data-topbar="light">
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../partials/page_top') %>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <%- include('../partials/side_menu', {selected: 17}) %>
+            <!-- Left Sidebar End -->
+          
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <% if (user.power == 0) { %>
+                            <div class="col-12">
+                              <div class="alert alert-warning" role="alert">
+                                You are on a demo account. You cannot access settings page.
+                              </div>
+                            </div>
+                          <% } else  { %>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">App Settings</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        <div class="row mb-4">
+                            <div class="col-xl-12">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="text-muted">
+                                            <div id="alertContainer561"></div>
+                                            <div class="table-responsive mt-4">
+                                                <div class="mt-4">
+                                                    <p class="mb-1">App Name:</p>
+                                                    <input type="text" id="appName" class="form-control" value="<%= config.app_name || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Package Name(Android):</p>
+                                                    <input type="text" id="androidPkg" class="form-control" value="<%= config.package_name_android || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Package Name(ioS):</p>
+                                                    <input type="text" id="iosPkg" class="form-control" value="<%= config.package_name_ios || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Stripe page coin's icon:</p>
+                                                    <input type="file" class="form-control" id="iconStripe">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">FAQ link:</p>
+                                                    <input type="text" id="faqLink" class="form-control" value="<%= config.faq_link || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Privacy Policy link:</p>
+                                                    <input type="text" id="pvcLink" class="form-control" value="<%= config.privacy_policy_link || '' %>">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">Terms link:</p>
+                                                    <input type="text" id="termLink" class="form-control" value="<%= config.terms_link || '' %>">
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-3 mt-3">
+                                                    <a type="submit" id="btnSaveApp" class="btn btn-primary waves-effect waves-light w-md">Save</a>
+                                                    <a type="button" id="download-json-button" class="btn btn-primary waves-effect waves-light w-md">Download JSON</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        <% } %>
+                    </div> <!-- container-fluid -->
+                </div>
+            <!-- end main content-->
+            <%- include('../partials/footer') %>
+        </div>
+        <!-- END layout-wrapper -->
+
+
+        <!-- Right Sidebar -->
+        <%- include('../partials/right_sidebar') %>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="assets/libs/jquery/jquery.min.js"></script>
+        <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="assets/libs/node-waves/waves.min.js"></script>
+        <script src="assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+        <script src="../assets/js/search.js"></script>
+        <!-- apexcharts -->
+        <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <script src="assets/js/pages/dashboard.init.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+<script>
+
+  const globalValues = {
+    "app_name": "<%= config.app_name %>",
+    "api_key": "<%= config.app_id %>",
+    "agora_app_id": "<%= config.agora_id %>",
+    "api_host": "<%= config.accessible_address %>"+':'+"<%= config.accessible_address_port %>",
+    "socket_url": "<%= config.accessible_address %>"+':'+ "<%= config.accessible_address_port %>",
+    "stream_url": "<%= config.stream_address %>"+':'+"<%= config.stream_address_port %>",
+    "web_login_url": "<%= config.login_address %>"+':'+"<%= config.login_address_port %>",
+    "faq_link": "<%= config.faq_link %>",
+    "privacy_policy_link": "<%= config.privacy_policy_link %>",
+    "terms_link": "<%= config.terms_link %>",
+    "package_name_android": "<%= config.package_name_android %>",
+    "package_name_ios": "<%= config.package_name_ios %>",
+  };
+
+  const downloadJsonButton = document.getElementById("download-json-button");
+  downloadJsonButton.addEventListener("click", downloadGlobalJson);
+
+
+
+    $(document).ready(function() {  
+        $('#alertContainer').empty();
+        $("#btnSaveApp").click(function(){
+        var appName = $('#appName').val();
+        var faqLink = $('#faqLink').val();
+        var pvcLink = $('#pvcLink').val();
+        var termsLink = $('#termLink').val();
+        var androidPkg = $('#androidPkg').val();
+        var iosPkg = $('#iosPkg').val();
+        var iconStripe = $('#iconStripe').prop('files');
+        saveAppSettings(appName, faqLink, pvcLink, termsLink, iconStripe, iosPkg, androidPkg);
+
+     });
+    });
+    async function saveAppSettings(appName, faqLink, pvcLink, termsLink, iconStripe, iosPkg, androidPkg) {
+      $('#alertContainer561').empty();
+
+                // Create a new FormData object
+                const formData = new FormData();
+
+                formData.append('appName', appName);
+                formData.append('faqLink', faqLink);
+                formData.append('pvcLink', pvcLink);
+                formData.append('termsLink', termsLink);
+                formData.append('androidPkg', androidPkg);
+                formData.append('iosPkg', iosPkg);
+                formData.append('iconStripe', iconStripe[0]);
+
+
+            $('#btnSaveApp').addClass("disabled");
+                $('#btnSaveApp').html('Saving');
+
+      $.ajax({
+        type: "POST",
+        url: "/admin/saveAppSettings",
+        data: formData,
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#btnSaveApp').removeClass("disabled");
+                 $('#btnSaveApp').html('Save');
+
+                $('#alertContainer561').html(`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${res.message}
+                </div>
+                `);
+                setTimeout(function () {
+                    $('#alertContainer561 .alert').hide();
+                }, 1000); 
+                }
+        },
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+      });
+    }
+
+
+    function downloadGlobalJson() {
+    const blob = new Blob([JSON.stringify(globalValues)], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "global.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+</script>
+    </body>
+
+</html>

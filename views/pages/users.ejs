@@ -1,0 +1,457 @@
+<%- include('../partials/head', {titleName: "User Management"}) %>
+
+    
+    <body data-sidebar="dark" data-layout-mode="dark" data-topbar="light">
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+        <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="alertContainer"></div>
+                    Are you sure you want to delete?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeModal" data-dismiss="exampleModalLabel">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteSticker">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../partials/page_top') %>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <%- include('../partials/side_menu', {selected: 1}) %>
+            <!-- Left Sidebar End -->
+    
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <% if (user.power == 0) { %>
+                                <div class="col-12">
+                                  <div class="alert alert-warning" role="alert">
+                                    This is a demo account. Any changes you make will not be saved.
+                                  </div>
+                                </div>
+                              <% } %>
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">Users</h4><div id="alertContainer4"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body" style="overflow: scroll !important;">
+                                        <div class="row mb-2">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addUser"><i class="mdi mdi-plus me-1"></i> Add User</button>                                               
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end row -->
+                                        <div class="table-responsive mb-4">
+                                            <table class="table table-centered table-nowrap mb-0">
+                                                <thead>
+                                                  <tr>
+                                                    <th scope="col" style="width: 10px;">#</th>
+                                                    <th></th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Verified</th>
+                                                    <th scope="col">Creator</th>
+                                                    <th>Country</th>
+                                                    <th scope="col" style="width: 200px;">Action</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody id="myUser">
+                                                    <% for(let i=0; i<users.length; i++) {%>
+                                                        <% const element = users[i]; %>
+                                                    <tr>
+                                                        <td style="width: 10px;"><%= i +1%></td>
+                                                        <td>
+                                                            <img src="<%= element.profilePicture ? element.profilePicture : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png' %>" alt="" class="avatar-xs rounded-circle me-2">
+                                                        </td>
+                                                        <td><%= element.name %></td>
+                                                        <td><%= element.email %></td>
+                                                        <td>
+                                                            <span class="badge <%= element.isVerified == 0 ? "bg-soft-warning " : "bg-soft-success" %> font-size-12">
+                                                                <%= element.isVerified == 0 ? "Not verified" : "Verified" %>
+                                                              </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge <%= element.isVerified == 0 ? "bg-soft-warning " : "bg-soft-success" %> font-size-12">
+                                                                <%= element.isCreator == 0 ? "No" : "Yes" %>
+                                                              </span>
+                                                        </td>
+                                                        <td><%= element.country %></td>
+                                                        <td>
+                                                            <ul class="list-inline mb-0">
+                                                                <li class="list-inline-item">
+                                                                    <a href="edit_users?id=<%= element.id %>" class="px-2 text-primary"><i class="uil uil-pen font-size-18"></i></a>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <a onclick="deleteUser(this, '<%= element.id %>')" class="px-2 text-danger" href="#"><i class="uil uil-trash-alt font-size-18"></i></a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <% }%>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-lg-12" style=" text-align: center; padding-bottom: 20px;">
+                                            <a type="submit" class="btn btn-primary" id="btnLoad">Load More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        <!-- Modal -->
+                        <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header py-3 px-4 border-bottom-0">
+                                        <h5 class="modal-title" id="modal-title">Add User</h5>
+                                        <button type="button" class="btn-close" aria-hidden="true" data-dismiss="modal" id="btnCloseModal"></button>
+                                    </div>
+                                    <div class="modal-body p-4">                                        
+                                        <div class="needs-validation" novalidate>
+                                            <div class="row">
+                                                <div id="alertContainer"></div>
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Name</label>
+                                                        <input type="text" class="form-control" id="name" placeholder="Enter Name" required>
+                                                        <div class="invalid-feedback">
+                                                            Enter Name
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Username</label>
+                                                        <input type="text" class="form-control" id="username" placeholder="Enter Username" required>
+                                                        <div class="invalid-feedback">
+                                                            Enter Username
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Profile Picture</label>
+                                                        <input type="file" class="form-control" id="picture" required>
+                                                        <div class="invalid-feedback">
+                                                            Enter Picture
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="text" class="form-control" id="email" placeholder="Enter Email" required>
+                                                        <div class="invalid-feedback">
+                                                            Enter Email
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">About</label>
+                                                        <input type="text" class="form-control" id="about" placeholder="Enter About" required>
+                                                        <div class="invalid-feedback">
+                                                            Enter About
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Is verified</label>
+                                                        <select class="form-control form-select" id="isVerified" required>
+                                                            <option unselected></option>
+                                                            <option value="1">Yes</option>
+                                                            <option value="0">No</option>
+                                                        </select>
+                                                        <div class="invalid-feedback">
+                                                            Select one
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Gems</label>
+                                                        <input class="form-control" placeholder="Enter Gems"
+                                                            type="number"  id="gems" value="" required/>
+                                                            <div class="invalid-feedback">
+                                                                Enter Gems
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Coins</label>
+                                                        <input class="form-control" placeholder="Enter Coins"
+                                                            type="number"  id="coins" required value="" />
+                                                            <div class="invalid-feedback">
+                                                                Enter Coins
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 text-end">
+                                                    <button type="button" class="btn btn-secondary" id="closeM"  data-dismiss="modal" >Cancel</button>
+                                                    <button type="submit" class="btn btn-success" id="btnSave">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>   
+                                    </div>
+                                </div> 
+                                <!-- end modal-content-->
+                            </div>
+                        </div>
+                        <!-- end modal-->
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+            </div>
+            <!-- end main content-->
+            <%- include('../partials/footer') %>
+        </div>
+        <!-- END layout-wrapper -->
+
+        <!-- Right Sidebar -->
+        <%- include('../partials/right_sidebar') %>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="../assets/libs/jquery/jquery.min.js"></script>
+        <script src="../assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="../assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="../assets/libs/node-waves/waves.min.js"></script>
+        <script src="../assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="../assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+        <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+        <script src="../assets/js/search.js"></script>
+        <script src="../assets/js/pages/dashboard.init.js"></script>
+
+        <!-- App js -->
+        <script src="../assets/js/app.js"></script>   
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- App js -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="../assets/libs/parsleyjs/parsley.min.js"></script>
+        <script src="../assets/js/pages/form-validation.init.js"></script>
+        <script>
+            $('#closeModal').click(function () {
+                $('#deleteUser').modal('hide');
+            });
+            $(document).ready(function() {  
+                 $('#alertContainer').empty();
+                $("#btnSave").click(function(){
+
+                var name = $("#name").val();
+                var username = $("#username").val();
+                var picture = $("#picture").prop('files');
+                var about = $("#about").val();
+                var email = $("#email").val();
+                var auth = Math.random().toString(36).substring(2);
+                var isVerified = $("#isVerified").val();
+                var gems = $("#gems").val();
+                var coins = $("#coins").val();
+
+                if (!name || !username || !picture || !about || !email || !isVerified || !gems || !coins) {
+                    $('#alertContainer').html(`
+                        <div class="alert alert-danger" role="alert">
+                        Please fill in all fields.
+                        </div>
+                    `);
+                    $('#alertContainer .alert').fadeOut(2000);
+                    return;
+                    }
+        
+                updateData(name, username, picture, about, email, auth, isVerified, gems, coins);
+
+             });
+            });
+            async function updateData(name, username, picture, about, email, auth, isVerified, gems, coins) { 
+              $('#alertContainer').empty();
+        
+              const formData = new FormData();
+        
+                // Add the form fields and values
+                formData.append('name', name);
+                formData.append('username', username);
+                formData.append('about', about);
+                formData.append('email', email);
+                formData.append('isVerified', isVerified);
+                formData.append('auth', auth);
+                formData.append('gems', gems);
+                formData.append('coins', coins);
+                formData.append('picture', picture[0]);
+
+              $('#btnSave').addClass("disabled");
+              $('#btnSave').html('Saving..');
+
+              $.ajax({
+                type: "POST",
+                url: "/admin/addUser",
+                data:  formData,
+                success: function (res) {
+                    if (res.status === 'success') {
+                        window.location.reload();
+                        $('#btnSave').removeClass("disabled");
+                        $('#btnSave').html('Save');
+                        $('#alertContainer').html(`
+                            <div class="alert alert-success" role="alert">
+                                ${res.message}
+                            </div>
+                        `);
+                        setTimeout(function () {
+                            $('#alertContainer .alert').hide();
+                        }, 2000); 
+                        }
+                },
+                // Set the content type to multipart/form-data
+                contentType: false,
+                // Set the processData option to false to prevent jQuery from trying to convert the FormData object to a string
+                processData: false,
+                dataType: 'json',
+              });
+            }
+                    function deleteUser(element, reportId) {
+                    $('#deleteUser').modal('show');
+                    var id = reportId;
+                    let btn = element;
+                    
+                    
+                    $('#deleteSticker').click(function () {
+                        $.ajax({
+                            url: '/admin/deleteUser',
+                            type: 'POST',
+                            data: {
+                                id: id
+                            },
+                            success: function (res) {
+                                if (res.status === 'success') {
+                                    $('#deleteUser').modal('hide');
+                                    btn.parentNode.parentNode.parentNode.parentNode.remove();
+                                    $('#alertContainer').html(`
+                                    <div class="alert alert-success" role="alert">
+                                            ${res.message}
+                                    </div>
+                                `);
+                        setTimeout(function () {
+                                $('#alertContainer .alert').hide();
+                            }, 2000);
+                        }
+                            },
+                            dataType: "json",
+                        });
+                    });
+                }    
+
+                $(document).ready(function () {
+    let usersCount = <%= users.length %>;
+
+    $('#btnLoad').click(function () {
+        changeButtonText();
+        $.ajax({
+            url: '/admin/fetch/users',
+            type: 'GET',
+            data: {
+                'from': usersCount,
+            },
+            dataType: "json",
+            success: function (res) {
+                const users = res.users;
+                const tbody = document.getElementById('myUser');
+                if (users.length === 0) {
+                    $('#btnLoad').hide(); // Hide the button when no more data is available
+                }
+                let html = '';
+                for (let i = 0; i < users.length; i++) {
+                    const element = users[i];
+                    html += `
+                    <tr>
+                        <td style="width: 10px;">${i + usersCount + 1}</td>
+                        <td>
+                            <img src="${element.profilePicture ? element.profilePicture : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'}" alt="" class="avatar-xs rounded-circle me-2">
+                        </td>
+                        <td>${element.name}</td>
+                        <td>${element.email}</td>
+                        <td>
+                            <span class="badge ${element.isVerified == 0 ? "bg-soft-warning " : "bg-soft-success"} font-size-12">
+                                ${element.isVerified == 0 ? "Not verified" : "Verified"}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge ${element.isCreator == 0 ? "bg-soft-warning " : "bg-soft-success"} font-size-12">
+                                ${element.isCreator == 0 ? "No" : "Yes"}
+                            </span>
+                        </td>
+                        <td>${element.country}</td>
+                        <td>
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item">
+                                    <a href="edit_users?id=${element.id}" class="px-2 text-primary"><i class="uil uil-pen font-size-18"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a onclick="deleteUser(this, '${element.id}')" class="px-2 text-danger" href="#"><i class="uil uil-trash-alt font-size-18"></i></a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    `;
+                }
+
+                tbody.innerHTML += html;
+                usersCount += users.length; // Update usersCount with the new data
+                changeButtonText(); // Change button text back to "Load More"
+            },
+            error: function () {
+                // Handle error if necessary
+            }
+        });
+    });
+
+    function changeButtonText() {
+        // Get the button element
+        var button = document.getElementById("btnLoad");
+        // Update the innerHTML of the button element with the spinner or "Load More"
+        button.innerHTML = 'Load More';
+    }
+});
+
+        </script>
+
+    </body>
+</html>
