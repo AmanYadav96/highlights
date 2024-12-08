@@ -18,7 +18,6 @@ class DbHandler {
                 password: password_,
                 database: database_,
                 port: port_,
-                // ssl: "/etc/ssl/certs/ca-certificates.crt",
                 charset: 'utf8mb4',
                 connectTimeout: 10000,  // set a connection timeout of 10 seconds
                 acquireTimeout: 10000,  // set an acquire timeout of 10 seconds
@@ -55,32 +54,23 @@ class DbHandler {
             return DbHandler.instance;
         }
 
-        getConfigs() {
-            return new Promise((resolve, reject) => {
-                var query = "SELECT * FROM config";
-                query = mysql.format(query);
-                
-                this.pool.getConnection(function (err, connection) {
-                    if (err) {
-                        return reject(err);
+    getConfigs() {
+        return new Promise(function (resolve, reject) {
+            var query = "SELECT * FROM config";
+            query = mysql.format(query);
+            this.pool.getConnection(function (err, connection) {
+                connection.query(query, function (err, results, fields) {
+                    connection.release();
+                    if (err) reject(err);
+                    var configs = [];
+                    for (let i = 0; i < results.length; i++) {
+                        configs[results[i]['name']] = results[i]['value'];
                     }
-        
-                    connection.query(query, function (err, results, fields) {
-                        connection.release();
-                        if (err) {
-                            return reject(err);
-                        }
-                        
-                        var configs = [];
-                        for (let i = 0; i < results.length; i++) {
-                            configs[results[i]['name']] = results[i]['value'];
-                        }
-                        resolve(configs);
-                    });
+                    resolve(configs);
                 });
             });
-        }
-        
+        }.bind(this));
+    }
 
     getUserByUsername(username) {
         return new Promise(
