@@ -24,8 +24,7 @@ exports.postAddAdmin = async (req, res) => {
     const result = await adminModel.deleteAdmin(req.body.id);
     res.send(result);
   }
-
-
+ 
   exports.postRemoveAdmin = async (req, res) => {
     const adminModel = new Admin();
     const result = await adminModel.removeAdmin(req.body.id);

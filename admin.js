@@ -44,6 +44,8 @@ const { getTagsData, getFetchTagsData, postAddTag, postUpPriority, postDownPrior
 const { getNotificationsData, postSaveNotifications } = require('./controller/notifications/notification_controller');
 const { getSettingsData, getAgoraSettingsData, getCDNSettingsData, getStripeSettingsData, getServerSettingsData, getAppSettingsData, getAlgorithmSettingsData, postSaveAgora, postSaveStripe, postSaveAlgorithm, postCdn, postSavePassword, postSaveApp, postSaveAppSettings, postGenerateToken } = require('./controller/settings/settings_controller');
 const { getBannersData, deleteBanner, addBanner } = require('./controller/ads/banners_controller');
+const {getSoundCategoryData , postAddSoundCategory , postDeleteSoundCategory} = require('./controller/soundCategories/sound_categories_controller.js')
+const {getSoundsData}= require('./controller/sounds/sounds_controller.js')
 
 // router.set('view engine', 'ejs');
 router.use(urlencodedParser);
@@ -159,6 +161,12 @@ router.get('/fetch/streams', getFetchLiveStreamData);
 
 router.get('/edit_users', getEditUserData);
 
+router.get('/sound_categories',getSoundCategoryData);
+
+router.get('/sounds',getSoundsData);
+
+
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads/images')
@@ -242,6 +250,8 @@ router.post('/deletePackage', postDeletePackage);
 router.get('/gift_catogories', getGiftCategoryData);
 
 router.get('/banks', getBanksData);
+
+router.post('/addSoundCategory', postAddSoundCategory);
 
 const giftStorage = multer.diskStorage({
     destination: function (req, file, cb) {

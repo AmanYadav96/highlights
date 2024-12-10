@@ -401,21 +401,21 @@ async function sendFirebaseNotification(sender, event, data) {
   app.use('/refer', referRoute);
 
   /* Middleware: Check authorization Pass on */
-  app.use((req, res, next) => {
-    if (req.path === '/cancel' || req.path === '/success' || req.path === '/favicon.ico' || req.path === 'success' || req.path === 'cancel' || req.path === 'success_coins' || req.path === '/success_coins' || req.path === 'discover/updateIsAdult' || req.path === '/discover/updateIsAdult') {
-      next();
-      return;
-    }
-    if ('authid' in req.headers) {     
-      if (req.headers['authid'] == global.appAuthKey) {
-        next();
-        return;
-      }
-    }
-    res.status(400).send({
-      error: "unauthorized",
-    });
-  });
+  // app.use((req, res, next) => {
+  //   if (req.path === '/cancel' || req.path === '/success' || req.path === '/favicon.ico' || req.path === 'success' || req.path === 'cancel' || req.path === 'success_coins' || req.path === '/success_coins' || req.path === 'discover/updateIsAdult' || req.path === '/discover/updateIsAdult') {
+  //     next();
+  //     return;
+  //   }
+  //   if ('authid' in req.headers) {     
+  //     if (req.headers['authid'] == global.appAuthKey) {
+  //       next();
+  //       return;
+  //     }
+  //   }
+  //   res.status(400).send({
+  //     errorrrr: "unauthorized",
+  //   });
+  // });
 
   function userAuthorization(optional) {
     return (async (req, res, next) => {
@@ -854,7 +854,7 @@ async function sendFirebaseNotification(sender, event, data) {
   db.getConfigs().then((config) => {
     global.config = config;
     // var server_port = process.env.PORT || config.accessible_address_port;
-    var server_port = 4000;
+    var server_port = 3004;
     global.appAuthKey = config.app_id;
     global.key = config.service_account_details;
     global.android_package = config.package_name_android;
