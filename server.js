@@ -854,7 +854,7 @@ async function sendFirebaseNotification(sender, event, data) {
   db.getConfigs().then((config) => {
     global.config = config;
     // var server_port = process.env.PORT || config.accessible_address_port;
-    var server_port = 3004;
+    var server_port = 4000;
     global.appAuthKey = config.app_id;
     global.key = config.service_account_details;
     global.android_package = config.package_name_android;
